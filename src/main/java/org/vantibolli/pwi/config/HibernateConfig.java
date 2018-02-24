@@ -17,7 +17,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.vantibolli.model.Product;
+import org.vantibolli.pwi.model.Product;
 
 /**
  * @author naveed

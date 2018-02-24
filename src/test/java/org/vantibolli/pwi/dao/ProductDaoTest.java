@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-import org.vantibolli.model.Product;
+import org.vantibolli.pwi.model.Product;
 
 /**
  * @author naveed
@@ -32,37 +32,41 @@ public class ProductDaoTest {
 	@Spy
 	private List<Product> productList = new ArrayList<>();
 	
-    @BeforeClass
-    public void setUp(){
-        MockitoAnnotations.initMocks(this);
-        initProductList();
-    }
+	@BeforeClass
+	public void setUp() {
+		MockitoAnnotations.initMocks(this);
+		initProductList();
+	}
 	
 	@Test
 	public void listProducts() {
 		when(productDao.findAll()).thenReturn(productList);
 		List<Product> prodList = productDao.findAll();
 		
-		logger.info("Product list size=" + productList.size());
+		logger.info("Product list size=" + prodList.size());
 		
-		for (Product product : productList) {
+		for (Product product : prodList) {
 			logger.info(product.toString());
 		}
+		
 		assertThat(prodList).isEqualTo(productList);
 	}
 	
 	private void initProductList() {
 		Product product = new Product();
+		product.setId(4);
 		product.setCode("PROD-004");
 		product.setName("Product 4");
 		productList.add(product);
 		
 		product = new Product();
+		product.setId(5);
 		product.setCode("PROD-005");
 		product.setName("Product 5");
 		productList.add(product);
 		
 		product = new Product();
+		product.setId(6);
 		product.setCode("PROD-006");
 		product.setName("Product 6");
 		productList.add(product);

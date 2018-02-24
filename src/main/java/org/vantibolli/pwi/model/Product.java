@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.vantibolli.model;
+package org.vantibolli.pwi.model;
 
 import java.io.Serializable;
 

@@ -4,7 +4,7 @@
 package org.vantibolli.pwi.dao;
 
 import org.springframework.stereotype.Repository;
-import org.vantibolli.model.Product;
+import org.vantibolli.pwi.model.Product;
 
 /**
  * @author naveed
