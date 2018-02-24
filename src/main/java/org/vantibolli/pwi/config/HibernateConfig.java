@@ -17,7 +17,12 @@ import org.springframework.core.env.Environment;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.vantibolli.pwi.model.Country;
+import org.vantibolli.pwi.model.Inventory;
 import org.vantibolli.pwi.model.Product;
+import org.vantibolli.pwi.model.ProductSize;
+import org.vantibolli.pwi.model.ProductType;
+import org.vantibolli.pwi.model.Warehouse;
 
 /**
  * @author naveed
@@ -64,8 +69,12 @@ public class HibernateConfig {
 		factoryBean.setHibernateProperties(props);
 		factoryBean.setPackagesToScan(new String[] { "org.vantibolli.pwi.model" });
 		
-		// TODO add every dao
 		factoryBean.setAnnotatedClasses(Product.class);
+		factoryBean.setAnnotatedClasses(ProductSize.class);
+		factoryBean.setAnnotatedClasses(ProductType.class);
+		factoryBean.setAnnotatedClasses(Country.class);
+		factoryBean.setAnnotatedClasses(Warehouse.class);
+		factoryBean.setAnnotatedClasses(Inventory.class);
 		
 		return factoryBean;
 	}
