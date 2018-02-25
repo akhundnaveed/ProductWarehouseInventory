@@ -13,6 +13,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.vantibolli.pwi.util.PwiException;
 
 /**
  * @author naveed
@@ -27,24 +28,26 @@ public abstract class AbstractDao<T extends Serializable> {
 	
 	@SuppressWarnings("unchecked")
 	public AbstractDao() {
-		this.clazz =  (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+		this.clazz = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	@Transactional
 	public T findOne(Integer id) {
 		return (T) getCurrentSession().get(clazz, id);
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	@Transactional
 	public List<T> findAll() {
-		Query query = sessionFactory.getCurrentSession().createQuery("from " + clazz.getName());
+		Query query = getCurrentSession().createQuery("from " + clazz.getName());
 		return query.list();
 	}
 	
 	@Transactional
 	public void save(T entity) {
+		if (entity == null)
+			throw new PwiException(clazz + " is null");
 		getCurrentSession().persist(entity);
 	}
 	
@@ -57,6 +60,8 @@ public abstract class AbstractDao<T extends Serializable> {
 	
 	@Transactional
 	public void update(T entity) {
+		if (entity == null)
+			throw new PwiException(clazz + " not found in DB to update");
 		getCurrentSession().merge(entity);
 	}
 	
@@ -75,4 +80,3 @@ public abstract class AbstractDao<T extends Serializable> {
 		return sessionFactory.getCurrentSession();
 	}
 }
-

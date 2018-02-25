@@ -35,6 +35,21 @@ public class Product implements Serializable {
 	
 	@Column(name="code")
 	private String code;
+	
+	public Product() {
+		
+	}
+
+	/**
+	 * @param id
+	 * @param name
+	 * @param code
+	 */
+	public Product(Integer id, String name, String code) {
+		this.id = id;
+		this.name = name;
+		this.code = code;
+	}
 
 	/**
 	 * @return the id

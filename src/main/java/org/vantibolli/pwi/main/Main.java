@@ -343,8 +343,31 @@ public class Main {
 			logger.info(inventory2.toString());
 		}
 		*/
-		
-		context.close();
+
+		try {
+			/*
+			WarehouseDao warehouseDao = context.getBean(WarehouseDao.class);
+			List<Warehouse> warehouseList = warehouseDao.findWarehousesByCountryId(1);
+			
+			for (Warehouse warehouse : warehouseList) {
+				logger.info(warehouse.toString());
+			}
+			*/
+
+			InventoryDao inventoryDao = context.getBean(InventoryDao.class);
+
+//			List<Inventory> li = inventoryDao.findInventoriesByCountryId(1);
+			List<Inventory> li = inventoryDao.findInventoriesByWarehouseId(4);
+			
+			for (Inventory inventory : li) {
+				logger.info(inventory.toString());
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			context.close();
+		}
 	}
 	
 }
