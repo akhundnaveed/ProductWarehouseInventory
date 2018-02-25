@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.vantibolli.pwi.util;
+package org.vantibolli.pwi.ext;
 
 /**
  * @author naveed

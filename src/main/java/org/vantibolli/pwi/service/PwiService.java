@@ -26,7 +26,7 @@ public interface PwiService {
 	
 	public Product findProductById(Integer id);
 	
-	public void deleteProduct(Integer id);
+	public void deleteProduct(Product product);
 	
 	public List<ProductSize> listAllProductSizes();
 	
@@ -36,7 +36,7 @@ public interface PwiService {
 	
 	public ProductSize findProductSizeById(Integer id);
 	
-	public void deleteProductSize(Integer id);
+	public void deleteProductSize(ProductSize productSize);
 	
 	public List<ProductType> listAllProductTypes();
 	
@@ -46,15 +46,17 @@ public interface PwiService {
 	
 	public ProductType findProductTypeById(Integer id);
 	
-	public void deleteProductType(Integer id);
+	public void deleteProductType(ProductType productType);
 	
 	public List<Country> listCountries();
 	
 	public void addCountry(Country country);
 	
+	public void updateCountry(Country country);
+	
 	public Country findCountryById(Integer id);
 	
-	public void deleteCountry(Integer id);
+	public void deleteCountry(Country country);
 	
 	public List<Warehouse> listAllWarehouses();
 	
@@ -66,7 +68,7 @@ public interface PwiService {
 	
 	public Warehouse findWarehouseById(Integer id);
 	
-	public void deleteWarehouse(Integer id);
+	public void deleteWarehouse(Warehouse warehouse);
 	
 	public List<Inventory> listAllInventories();
 	
@@ -80,5 +82,5 @@ public interface PwiService {
 
 	public Inventory findInventoryById(Integer id);
 
-	public void deleteInventory(Integer id);
+	public void deleteInventory(Inventory inventory);
 }

@@ -79,11 +79,11 @@ public class PwiServiceImpl implements PwiService {
 	}
 	
 	/* (non-Javadoc)
-	 * @see org.vantibolli.pwi.service.PwiService#deleteProduct(java.lang.Integer)
+	 * @see org.vantibolli.pwi.service.PwiService#deleteProduct(org.vantibolli.pwi.model.Product)
 	 */
 	@Override
-	public void deleteProduct(Integer id) {
-		productDao.deleteById(id);
+	public void deleteProduct(Product product) {
+		productDao.delete(product);
 	}
 	
 	/* (non-Javadoc)
@@ -119,11 +119,11 @@ public class PwiServiceImpl implements PwiService {
 	}
 	
 	/* (non-Javadoc)
-	 * @see org.vantibolli.pwi.service.PwiService#deleteProductSize(java.lang.Integer)
+	 * @see org.vantibolli.pwi.service.PwiService#deleteProductSize(org.vantibolli.pwi.model.ProductSize)
 	 */
 	@Override
-	public void deleteProductSize(Integer id) {
-		productSizeDao.deleteById(id);
+	public void deleteProductSize(ProductSize productSize) {
+		productSizeDao.delete(productSize);
 	}
 	
 	/* (non-Javadoc)
@@ -159,11 +159,11 @@ public class PwiServiceImpl implements PwiService {
 	}
 	
 	/* (non-Javadoc)
-	 * @see org.vantibolli.pwi.service.PwiService#deleteProductType(java.lang.Integer)
+	 * @see org.vantibolli.pwi.service.PwiService#deleteProductType(org.vantibolli.pwi.model.ProductType)
 	 */
 	@Override
-	public void deleteProductType(Integer id) {
-		productTypeDao.deleteById(id);
+	public void deleteProductType(ProductType productType) {
+		productTypeDao.delete(productType);
 	}
 	
 	/* (non-Javadoc)
@@ -183,6 +183,14 @@ public class PwiServiceImpl implements PwiService {
 	}
 	
 	/* (non-Javadoc)
+	 * @see org.vantibolli.pwi.service.PwiService#updateCountry(org.vantibolli.pwi.model.Country)
+	 */
+	@Override
+	public void updateCountry(Country country) {
+		countryDao.update(country);
+	}
+	
+	/* (non-Javadoc)
 	 * @see org.vantibolli.pwi.service.PwiService#findCountryById(java.lang.Integer)
 	 */
 	@Override
@@ -191,11 +199,11 @@ public class PwiServiceImpl implements PwiService {
 	}
 	
 	/* (non-Javadoc)
-	 * @see org.vantibolli.pwi.service.PwiService#deleteCountry(java.lang.Integer)
+	 * @see org.vantibolli.pwi.service.PwiService#deleteCountry(org.vantibolli.pwi.model.Country)
 	 */
 	@Override
-	public void deleteCountry(Integer id) {
-		countryDao.deleteById(id);
+	public void deleteCountry(Country country) {
+		countryDao.delete(country);
 	}
 	
 	/* (non-Javadoc)
@@ -239,11 +247,11 @@ public class PwiServiceImpl implements PwiService {
 	}
 	
 	/* (non-Javadoc)
-	 * @see org.vantibolli.pwi.service.PwiService#deleteWarehouse(java.lang.Integer)
+	 * @see org.vantibolli.pwi.service.PwiService#deleteWarehouse(org.vantibolli.pwi.model.Warehouse)
 	 */
 	@Override
-	public void deleteWarehouse(Integer id) {
-		warehouseDao.deleteById(id);
+	public void deleteWarehouse(Warehouse warehouse) {
+		warehouseDao.delete(warehouse);
 	}
 	
 	/* (non-Javadoc)
@@ -295,10 +303,10 @@ public class PwiServiceImpl implements PwiService {
 	}
 	
 	/* (non-Javadoc)
-	 * @see org.vantibolli.pwi.service.PwiService#deleteInventory(java.lang.Integer)
+	 * @see org.vantibolli.pwi.service.PwiService#deleteInventory(org.vantibolli.pwi.model.Inventory)
 	 */
 	@Override
-	public void deleteInventory(Integer id) {
-		inventoryDao.deleteById(id);
+	public void deleteInventory(Inventory inventory) {
+		inventoryDao.delete(inventory);
 	}
 }

@@ -3,6 +3,8 @@
  */
 package org.vantibolli.pwi.service;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.vantibolli.pwi.ext.Response;
 import org.vantibolli.pwi.model.Product;
-import org.vantibolli.pwi.util.Response;
 
 /**
  * @author naveed
@@ -25,9 +27,9 @@ import org.vantibolli.pwi.util.Response;
  */
 @Controller
 @RequestMapping("/product")
-public class PwiWebController {
+public class ProductWebController {
 	
-	private static Logger logger = LoggerFactory.getLogger(PwiWebController.class);
+	private static Logger logger = LoggerFactory.getLogger(ProductWebController.class);
 	
 	@Autowired
 	private PwiService pwiService;
@@ -36,14 +38,20 @@ public class PwiWebController {
 	public ResponseEntity<Object> listProducts() {
 		try {
 			logger.info("Getting list of products");
-			return new ResponseEntity<>(pwiService.listAllProducts(), HttpStatus.FOUND);
+			List<Product> productsList = pwiService.listAllProducts();
+			
+			if (productsList == null || productsList.isEmpty()) {
+				return new ResponseEntity<>(new Response(false, "No Products found"), HttpStatus.NOT_FOUND);
+			}
+			
+			return new ResponseEntity<>(productsList, HttpStatus.OK);
 		} catch (Exception e) {
 			logger.error("Error occurred while getting list of all products", e);
-			return new ResponseEntity<>(new Response(false, "Error occurred while adding Product:" + e.getMessage()),
+			return new ResponseEntity<>(new Response(false, "Error occurred while getting list of all Products:" + e.getMessage()),
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-
+	
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
 	public ResponseEntity<Object> findProduct(@PathVariable Integer id) {
 		try {
@@ -54,13 +62,14 @@ public class PwiWebController {
 			
 			Product product = pwiService.findProductById(id);
 			
-			if (product == null)
+			if (product == null) {
 				return new ResponseEntity<>(new Response(false, "Product not found against given product id:" + id), HttpStatus.NOT_FOUND);
+			}
 			
 			return new ResponseEntity<>(product, HttpStatus.OK);
 		} catch (Exception e) {
 			logger.error("Error occurred while finding a product against given id", e);
-			return new ResponseEntity<>(new Response(false, "Error occurred while adding Product:" + e.getMessage()),
+			return new ResponseEntity<>(new Response(false, "Error occurred while finding Product:" + e.getMessage()),
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -73,7 +82,7 @@ public class PwiWebController {
 			if (StringUtils.isEmpty(product.getCode())) {
 				return new ResponseEntity<>(new Response(false, "Product.code is missing"), HttpStatus.BAD_REQUEST);
 			} else if (StringUtils.isEmpty(product.getName())) {
-				return new ResponseEntity<>(new Response(false, "Product.name is name"), HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>(new Response(false, "Product.name is missing"), HttpStatus.BAD_REQUEST);
 			}
 			
 			pwiService.addProduct(product);
@@ -81,7 +90,7 @@ public class PwiWebController {
 			HttpHeaders headers = new HttpHeaders();
 			headers.setLocation(ucBuilder.path("/product/{id}").buildAndExpand(product.getId()).toUri());
 			
-			return new ResponseEntity<>(new Response(true, "Successfully added Product"), HttpStatus.CREATED);
+			return new ResponseEntity<>(new Response(true, "Successfully added Product. id:" + product.getId()), HttpStatus.CREATED);
 		} catch (Exception e) {
 			logger.error("Error occurred while adding product", e);
 			return new ResponseEntity<>(new Response(false, "Error occurred while adding Product:" + e.getMessage()),
@@ -99,19 +108,19 @@ public class PwiWebController {
 			} else if (StringUtils.isEmpty(product.getCode())) {
 				return new ResponseEntity<>(new Response(false, "Product.code is missing"), HttpStatus.BAD_REQUEST);
 			} else if (StringUtils.isEmpty(product.getName())) {
-				return new ResponseEntity<>(new Response(false, "Product.name is name"), HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>(new Response(false, "Product.name is missing"), HttpStatus.BAD_REQUEST);
 			}
 			
 			pwiService.updateProduct(product);
 			
-			return new ResponseEntity<>(new Response(true, "Successfully updated Product"), HttpStatus.OK);
+			return new ResponseEntity<>(new Response(true, "Successfully updated Product. id:" + product.getId()), HttpStatus.OK);
 		} catch (Exception e) {
-			logger.error("Error occurred while adding product", e);
+			logger.error("Error occurred while updating product", e);
 			return new ResponseEntity<>(new Response(false, "Error occurred while updating Product:" + e.getMessage()),
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-
+	
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Object> deleteProduct(@PathVariable Integer id) {
 		try {
@@ -120,7 +129,13 @@ public class PwiWebController {
 				return new ResponseEntity<>(new Response(false, "Product.id is missing"), HttpStatus.BAD_REQUEST);
 			}
 			
-			pwiService.deleteProduct(id);
+			Product product = pwiService.findProductById(id);
+			
+			if (product == null) {
+				return new ResponseEntity<>(new Response(false, "Product could not be found to be deleted.id=" + id), HttpStatus.NOT_FOUND);
+			}
+			
+			pwiService.deleteProduct(product);
 			
 			return new ResponseEntity<>(new Response(true, "Successfully deleted Product.id=" + id), HttpStatus.OK);
 		} catch (Exception e) {
