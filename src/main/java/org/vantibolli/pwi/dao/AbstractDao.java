@@ -13,7 +13,6 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.vantibolli.pwi.ext.PwiException;
 
 /**
  * @author naveed
@@ -46,8 +45,6 @@ public abstract class AbstractDao<T extends Serializable> {
 	
 	@Transactional
 	public void save(T entity) {
-		if (entity == null)
-			throw new PwiException(clazz + " is null");
 		getCurrentSession().persist(entity);
 	}
 	
@@ -60,8 +57,6 @@ public abstract class AbstractDao<T extends Serializable> {
 	
 	@Transactional
 	public void update(T entity) {
-		if (entity == null)
-			throw new PwiException(clazz + " not found in DB to update");
 		getCurrentSession().merge(entity);
 	}
 	

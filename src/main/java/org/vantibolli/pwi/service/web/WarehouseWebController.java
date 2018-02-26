@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.vantibolli.pwi.service;
+package org.vantibolli.pwi.service.web;
 
 import java.util.List;
 
@@ -21,6 +21,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 import org.vantibolli.pwi.ext.Response;
 import org.vantibolli.pwi.model.Inventory;
 import org.vantibolli.pwi.model.Warehouse;
+import org.vantibolli.pwi.service.InventoryService;
+import org.vantibolli.pwi.service.WarehouseService;
 
 /**
  * @author naveed
@@ -33,13 +35,16 @@ public class WarehouseWebController {
 	private static Logger logger = LoggerFactory.getLogger(WarehouseWebController.class);
 	
 	@Autowired
-	private PwiService pwiService;
+	private WarehouseService warehouseService;
+
+	@Autowired
+	private InventoryService inventoryService;
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<Object> listWarehouses() {
 		try {
 			logger.info("Getting list of warehouses");
-			List<Warehouse> warehouseList = pwiService.listAllWarehouses();
+			List<Warehouse> warehouseList = warehouseService.listAllWarehouses();
 			
 			if (warehouseList == null || warehouseList.isEmpty()) {
 				return new ResponseEntity<>(new Response(false, "No Warehouses found"), HttpStatus.NOT_FOUND);
@@ -61,7 +66,7 @@ public class WarehouseWebController {
 				return new ResponseEntity<>(new Response(false, "Warehouse.id is missing"), HttpStatus.BAD_REQUEST);
 			}
 			
-			Warehouse warehouse = pwiService.findWarehouseById(id);
+			Warehouse warehouse = warehouseService.findWarehouseById(id);
 			
 			if (warehouse == null) {
 				return new ResponseEntity<>(new Response(false, "Warehouse not found against given warehouse id:" + id),
@@ -87,7 +92,7 @@ public class WarehouseWebController {
 				return new ResponseEntity<>(new Response(false, "Warehouse.country.id is missing"), HttpStatus.BAD_REQUEST);
 			}
 			
-			pwiService.addWarehouse(warehouse);
+			warehouseService.addWarehouse(warehouse);
 			
 			HttpHeaders headers = new HttpHeaders();
 			headers.setLocation(ucBuilder.path("/warehouse/{id}").buildAndExpand(warehouse.getId()).toUri());
@@ -114,7 +119,7 @@ public class WarehouseWebController {
 				return new ResponseEntity<>(new Response(false, "Warehouse.country.id is missing"), HttpStatus.BAD_REQUEST);
 			}
 			
-			pwiService.updateWarehouse(warehouse);
+			warehouseService.updateWarehouse(warehouse);
 			
 			return new ResponseEntity<>(new Response(true, "Successfully updated Warehouse. id:" + warehouse.getId()), HttpStatus.OK);
 		} catch (Exception e) {
@@ -132,14 +137,14 @@ public class WarehouseWebController {
 				return new ResponseEntity<>(new Response(false, "Warehouse.id is missing"), HttpStatus.BAD_REQUEST);
 			}
 			
-			Warehouse warehouse = pwiService.findWarehouseById(id);
+			Warehouse warehouse = warehouseService.findWarehouseById(id);
 			
 			if (warehouse == null) {
 				return new ResponseEntity<>(new Response(false, "Warehouse could not be found to be deleted.id=" + id),
 						HttpStatus.NOT_FOUND);
 			}
 			
-			pwiService.deleteWarehouse(warehouse);
+			warehouseService.deleteWarehouse(warehouse);
 			
 			return new ResponseEntity<>(new Response(true, "Successfully deleted Warehouse.id=" + id), HttpStatus.OK);
 		} catch (Exception e) {
@@ -157,14 +162,14 @@ public class WarehouseWebController {
 				return new ResponseEntity<>(new Response(false, "Warehouse.id is missing"), HttpStatus.BAD_REQUEST);
 			}
 			
-			Warehouse warehouse = pwiService.findWarehouseById(id);
+			Warehouse warehouse = warehouseService.findWarehouseById(id);
 			
 			if (warehouse == null) {
 				return new ResponseEntity<>(new Response(false, "Warehouse not found against given warehouse id:" + id),
 						HttpStatus.NOT_FOUND);
 			}
 			
-			List<Inventory> inventoryList = pwiService.listInventoriesByWarehouseId(id);
+			List<Inventory> inventoryList = inventoryService.listInventoriesByWarehouseId(id);
 			
 			if (inventoryList == null || inventoryList.isEmpty()) {
 				return new ResponseEntity<>(

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.vantibolli.pwi.service;
+package org.vantibolli.pwi.service.web;
 
 import java.util.List;
 
@@ -22,6 +22,9 @@ import org.vantibolli.pwi.ext.Response;
 import org.vantibolli.pwi.model.Country;
 import org.vantibolli.pwi.model.Inventory;
 import org.vantibolli.pwi.model.Warehouse;
+import org.vantibolli.pwi.service.CountryService;
+import org.vantibolli.pwi.service.InventoryService;
+import org.vantibolli.pwi.service.WarehouseService;
 
 /**
  * @author naveed
@@ -34,13 +37,19 @@ public class CountryWebController {
 	private static Logger logger = LoggerFactory.getLogger(CountryWebController.class);
 	
 	@Autowired
-	private PwiService pwiService;
+	private CountryService countryService;
+	
+	@Autowired
+	private InventoryService inventoryService;
+	
+	@Autowired
+	private WarehouseService warehouseService;
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<Object> listCountries() {
 		try {
 			logger.info("Getting list of countries");
-			List<Country> countryList = pwiService.listCountries();
+			List<Country> countryList = countryService.listAllCountries();
 			
 			if (countryList == null || countryList.isEmpty()) {
 				return new ResponseEntity<>(new Response(false, "No Countries found"), HttpStatus.NOT_FOUND);
@@ -62,7 +71,7 @@ public class CountryWebController {
 				return new ResponseEntity<>(new Response(false, "Country.id is missing"), HttpStatus.BAD_REQUEST);
 			}
 			
-			Country country = pwiService.findCountryById(id);
+			Country country = countryService.findCountryById(id);
 			
 			if (country == null) {
 				return new ResponseEntity<>(new Response(false, "Country not found against given country id:" + id), HttpStatus.NOT_FOUND);
@@ -85,7 +94,7 @@ public class CountryWebController {
 				return new ResponseEntity<>(new Response(false, "Country.name is missing"), HttpStatus.BAD_REQUEST);
 			}
 			
-			pwiService.addCountry(country);
+			countryService.addCountry(country);
 			
 			HttpHeaders headers = new HttpHeaders();
 			headers.setLocation(ucBuilder.path("/country/{id}").buildAndExpand(country.getId()).toUri());
@@ -109,7 +118,7 @@ public class CountryWebController {
 				return new ResponseEntity<>(new Response(false, "Country.name is missing"), HttpStatus.BAD_REQUEST);
 			}
 			
-			pwiService.updateCountry(country);
+			countryService.updateCountry(country);
 			
 			return new ResponseEntity<>(new Response(true, "Successfully updated Country. id:" + country.getId()), HttpStatus.OK);
 		} catch (Exception e) {
@@ -127,13 +136,13 @@ public class CountryWebController {
 				return new ResponseEntity<>(new Response(false, "Country.id is missing"), HttpStatus.BAD_REQUEST);
 			}
 			
-			Country country = pwiService.findCountryById(id);
+			Country country = countryService.findCountryById(id);
 			
 			if (country == null) {
 				return new ResponseEntity<>(new Response(false, "Country could not be found to be deleted.id=" + id), HttpStatus.NOT_FOUND);
 			}
 			
-			pwiService.deleteCountry(country);
+			countryService.deleteCountry(country);
 			
 			return new ResponseEntity<>(new Response(true, "Successfully deleted Country.id=" + id), HttpStatus.OK);
 		} catch (Exception e) {
@@ -151,13 +160,13 @@ public class CountryWebController {
 				return new ResponseEntity<>(new Response(false, "Country.id is missing"), HttpStatus.BAD_REQUEST);
 			}
 			
-			Country country = pwiService.findCountryById(id);
+			Country country = countryService.findCountryById(id);
 			
 			if (country == null) {
 				return new ResponseEntity<>(new Response(false, "Country not found against given country id:" + id), HttpStatus.NOT_FOUND);
 			}
 			
-			List<Warehouse> warehouseList = pwiService.listAllWarehousesByCountryId(id);
+			List<Warehouse> warehouseList = warehouseService.listAllWarehousesByCountryId(id);
 			
 			if (warehouseList == null || warehouseList.isEmpty()) {
 				return new ResponseEntity<>(
@@ -181,13 +190,13 @@ public class CountryWebController {
 				return new ResponseEntity<>(new Response(false, "Country.id is missing"), HttpStatus.BAD_REQUEST);
 			}
 			
-			Country country = pwiService.findCountryById(id);
+			Country country = countryService.findCountryById(id);
 			
 			if (country == null) {
 				return new ResponseEntity<>(new Response(false, "Country not found against given country id:" + id), HttpStatus.NOT_FOUND);
 			}
 			
-			List<Inventory> inventoryList = pwiService.listInventoriesByCountryId(id);
+			List<Inventory> inventoryList = inventoryService.listInventoriesByCountryId(id);
 			
 			if (inventoryList == null || inventoryList.isEmpty()) {
 				return new ResponseEntity<>(

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.vantibolli.pwi.service;
+package org.vantibolli.pwi.service.web;
 
 import java.util.List;
 
@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.vantibolli.pwi.ext.Response;
 import org.vantibolli.pwi.model.Product;
+import org.vantibolli.pwi.service.ProductService;
 
 /**
  * @author naveed
@@ -32,13 +33,13 @@ public class ProductWebController {
 	private static Logger logger = LoggerFactory.getLogger(ProductWebController.class);
 	
 	@Autowired
-	private PwiService pwiService;
+	private ProductService productService;
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<Object> listProducts() {
 		try {
 			logger.info("Getting list of products");
-			List<Product> productsList = pwiService.listAllProducts();
+			List<Product> productsList = productService.listAllProducts();
 			
 			if (productsList == null || productsList.isEmpty()) {
 				return new ResponseEntity<>(new Response(false, "No Products found"), HttpStatus.NOT_FOUND);
@@ -60,7 +61,7 @@ public class ProductWebController {
 				return new ResponseEntity<>(new Response(false, "Product.id is missing"), HttpStatus.BAD_REQUEST);
 			}
 			
-			Product product = pwiService.findProductById(id);
+			Product product = productService.findProductById(id);
 			
 			if (product == null) {
 				return new ResponseEntity<>(new Response(false, "Product not found against given product id:" + id), HttpStatus.NOT_FOUND);
@@ -85,7 +86,7 @@ public class ProductWebController {
 				return new ResponseEntity<>(new Response(false, "Product.name is missing"), HttpStatus.BAD_REQUEST);
 			}
 			
-			pwiService.addProduct(product);
+			productService.addProduct(product);
 			
 			HttpHeaders headers = new HttpHeaders();
 			headers.setLocation(ucBuilder.path("/product/{id}").buildAndExpand(product.getId()).toUri());
@@ -111,7 +112,7 @@ public class ProductWebController {
 				return new ResponseEntity<>(new Response(false, "Product.name is missing"), HttpStatus.BAD_REQUEST);
 			}
 			
-			pwiService.updateProduct(product);
+			productService.updateProduct(product);
 			
 			return new ResponseEntity<>(new Response(true, "Successfully updated Product. id:" + product.getId()), HttpStatus.OK);
 		} catch (Exception e) {
@@ -129,13 +130,13 @@ public class ProductWebController {
 				return new ResponseEntity<>(new Response(false, "Product.id is missing"), HttpStatus.BAD_REQUEST);
 			}
 			
-			Product product = pwiService.findProductById(id);
+			Product product = productService.findProductById(id);
 			
 			if (product == null) {
 				return new ResponseEntity<>(new Response(false, "Product could not be found to be deleted.id=" + id), HttpStatus.NOT_FOUND);
 			}
 			
-			pwiService.deleteProduct(product);
+			productService.deleteProduct(product);
 			
 			return new ResponseEntity<>(new Response(true, "Successfully deleted Product.id=" + id), HttpStatus.OK);
 		} catch (Exception e) {

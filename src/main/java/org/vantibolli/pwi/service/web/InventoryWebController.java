@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.vantibolli.pwi.service;
+package org.vantibolli.pwi.service.web;
 
 import java.util.List;
 
@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.vantibolli.pwi.ext.Response;
 import org.vantibolli.pwi.model.Inventory;
+import org.vantibolli.pwi.service.InventoryService;
 
 /**
  * @author naveed
@@ -29,15 +30,15 @@ import org.vantibolli.pwi.model.Inventory;
 public class InventoryWebController {
 	
 	private static Logger logger = LoggerFactory.getLogger(InventoryWebController.class);
-	
+
 	@Autowired
-	private PwiService pwiService;
+	private InventoryService inventoryService;
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<Object> listInventories() {
 		try {
 			logger.info("Getting list of inventories");
-			List<Inventory> inventoryList = pwiService.listAllInventories();
+			List<Inventory> inventoryList = inventoryService.listAllInventories();
 			
 			if (inventoryList == null || inventoryList.isEmpty()) {
 				return new ResponseEntity<>(new Response(false, "No Inventories found"), HttpStatus.NOT_FOUND);
@@ -59,7 +60,7 @@ public class InventoryWebController {
 				return new ResponseEntity<>(new Response(false, "Inventory.id is missing"), HttpStatus.BAD_REQUEST);
 			}
 			
-			Inventory inventory = pwiService.findInventoryById(id);
+			Inventory inventory = inventoryService.findInventoryById(id);
 			
 			if (inventory == null) {
 				return new ResponseEntity<>(new Response(false, "Inventory not found against given inventory id:" + id), HttpStatus.NOT_FOUND);
@@ -88,7 +89,7 @@ public class InventoryWebController {
 				return new ResponseEntity<>(new Response(false, "Inventory.product.type.id is missing"), HttpStatus.BAD_REQUEST);
 			}
 			
-			pwiService.addInventory(inventory);
+			inventoryService.addInventory(inventory);
 			
 			HttpHeaders headers = new HttpHeaders();
 			headers.setLocation(ucBuilder.path("/inventory/{id}").buildAndExpand(inventory.getId()).toUri());
@@ -118,7 +119,7 @@ public class InventoryWebController {
 				return new ResponseEntity<>(new Response(false, "Inventory.product.type.id is missing"), HttpStatus.BAD_REQUEST);
 			}
 			
-			pwiService.updateInventory(inventory);
+			inventoryService.updateInventory(inventory);
 			
 			return new ResponseEntity<>(new Response(true, "Successfully updated Inventory. id:" + inventory.getId()), HttpStatus.OK);
 		} catch (Exception e) {
@@ -136,13 +137,13 @@ public class InventoryWebController {
 				return new ResponseEntity<>(new Response(false, "Inventory.id is missing"), HttpStatus.BAD_REQUEST);
 			}
 			
-			Inventory inventory = pwiService.findInventoryById(id);
+			Inventory inventory = inventoryService.findInventoryById(id);
 			
 			if (inventory == null) {
 				return new ResponseEntity<>(new Response(false, "Inventory could not be found to be deleted.id=" + id), HttpStatus.NOT_FOUND);
 			}
 			
-			pwiService.deleteInventory(inventory);
+			inventoryService.deleteInventory(inventory);
 			
 			return new ResponseEntity<>(new Response(true, "Successfully deleted Inventory.id=" + id), HttpStatus.OK);
 		} catch (Exception e) {

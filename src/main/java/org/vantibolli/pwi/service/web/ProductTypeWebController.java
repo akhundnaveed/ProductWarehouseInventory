@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.vantibolli.pwi.service;
+package org.vantibolli.pwi.service.web;
 
 import java.util.List;
 
@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.vantibolli.pwi.ext.Response;
 import org.vantibolli.pwi.model.ProductType;
+import org.vantibolli.pwi.service.ProductTypeService;
 
 /**
  * @author naveed
@@ -32,14 +33,14 @@ public class ProductTypeWebController {
 	private static Logger logger = LoggerFactory.getLogger(ProductTypeWebController.class);
 	
 	@Autowired
-	private PwiService pwiService;
+	private ProductTypeService productTypeService;
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<Object> listProductTypes() {
 		try {
 			logger.info("Getting list of product types");
 			
-			List<ProductType> ptList = pwiService.listAllProductTypes();
+			List<ProductType> ptList = productTypeService.listAllProductTypes();
 			
 			if (ptList == null || ptList.isEmpty()) {
 				return new ResponseEntity<>(new Response(false, "No Product types found"), HttpStatus.NOT_FOUND);
@@ -62,7 +63,7 @@ public class ProductTypeWebController {
 				return new ResponseEntity<>(new Response(false, "Product Type id is missing"), HttpStatus.BAD_REQUEST);
 			}
 
-			ProductType productType = pwiService.findProductTypeById(id);
+			ProductType productType = productTypeService.findProductTypeById(id);
 			
 			if (productType == null) {
 				return new ResponseEntity<>(new Response(false, "Product type not found against given product type id:" + id), HttpStatus.NOT_FOUND);
@@ -85,7 +86,7 @@ public class ProductTypeWebController {
 				return new ResponseEntity<>(new Response(false, "Product.type is missing"), HttpStatus.BAD_REQUEST);
 			}
 			
-			pwiService.addProductType(productType);
+			productTypeService.addProductType(productType);
 			
 			HttpHeaders headers = new HttpHeaders();
 			headers.setLocation(ucBuilder.path("/productType/{id}").buildAndExpand(productType.getId()).toUri());
@@ -109,7 +110,7 @@ public class ProductTypeWebController {
 				return new ResponseEntity<>(new Response(false, "Product type is missing"), HttpStatus.BAD_REQUEST);
 			}
 			
-			pwiService.updateProductType(productType);
+			productTypeService.updateProductType(productType);
 			
 			return new ResponseEntity<>(new Response(true, "Successfully updated Product Type. id:" + productType.getId()), HttpStatus.OK);
 		} catch (Exception e) {
@@ -127,13 +128,13 @@ public class ProductTypeWebController {
 				return new ResponseEntity<>(new Response(false, "Product type id is missing"), HttpStatus.BAD_REQUEST);
 			}
 			
-			ProductType productType = pwiService.findProductTypeById(id);
+			ProductType productType = productTypeService.findProductTypeById(id);
 			
 			if (productType == null) {
 				return new ResponseEntity<>(new Response(false, "Product type could not be found to be deleted.id=" + id), HttpStatus.NOT_FOUND);
 			}
 			
-			pwiService.deleteProductType(productType);
+			productTypeService.deleteProductType(productType);
 			
 			return new ResponseEntity<>(new Response(true, "Successfully deleted Product type id=" + id), HttpStatus.OK);
 		} catch (Exception e) {

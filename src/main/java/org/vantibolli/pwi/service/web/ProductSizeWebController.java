@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.vantibolli.pwi.service;
+package org.vantibolli.pwi.service.web;
 
 import java.util.List;
 
@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.vantibolli.pwi.ext.Response;
 import org.vantibolli.pwi.model.ProductSize;
+import org.vantibolli.pwi.service.ProductSizeService;
 
 /**
  * @author naveed
@@ -32,13 +33,13 @@ public class ProductSizeWebController {
 	private static Logger logger = LoggerFactory.getLogger(ProductSizeWebController.class);
 	
 	@Autowired
-	private PwiService pwiService;
+	private ProductSizeService productSizeService;
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<Object> listProductSizes() {
 		try {
 			logger.info("Getting list of product sizes");
-			List<ProductSize> psList = pwiService.listAllProductSizes();
+			List<ProductSize> psList = productSizeService.listAllProductSizes();
 			
 			if (psList == null || psList.isEmpty()) {
 				return new ResponseEntity<>(new Response(false, "No Product sizes found"), HttpStatus.NOT_FOUND);
@@ -61,7 +62,7 @@ public class ProductSizeWebController {
 				return new ResponseEntity<>(new Response(false, "Product Size id is missing"), HttpStatus.BAD_REQUEST);
 			}
 
-			ProductSize productSize = pwiService.findProductSizeById(id);
+			ProductSize productSize = productSizeService.findProductSizeById(id);
 			
 			if (productSize == null) {
 				return new ResponseEntity<>(new Response(false, "Product size not found against given product size id:" + id), HttpStatus.NOT_FOUND);
@@ -84,7 +85,7 @@ public class ProductSizeWebController {
 				return new ResponseEntity<>(new Response(false, "Product.size is missing"), HttpStatus.BAD_REQUEST);
 			}
 			
-			pwiService.addProductSize(productSize);
+			productSizeService.addProductSize(productSize);
 			
 			HttpHeaders headers = new HttpHeaders();
 			headers.setLocation(ucBuilder.path("/productSize/{id}").buildAndExpand(productSize.getId()).toUri());
@@ -108,7 +109,7 @@ public class ProductSizeWebController {
 				return new ResponseEntity<>(new Response(false, "Product size is missing"), HttpStatus.BAD_REQUEST);
 			}
 			
-			pwiService.updateProductSize(productSize);
+			productSizeService.updateProductSize(productSize);
 			
 			return new ResponseEntity<>(new Response(true, "Successfully updated Product Size. id:" + productSize.getId()), HttpStatus.OK);
 		} catch (Exception e) {
@@ -126,13 +127,13 @@ public class ProductSizeWebController {
 				return new ResponseEntity<>(new Response(false, "Product size id is missing"), HttpStatus.BAD_REQUEST);
 			}
 			
-			ProductSize productSize = pwiService.findProductSizeById(id);
+			ProductSize productSize = productSizeService.findProductSizeById(id);
 			
 			if (productSize == null) {
 				return new ResponseEntity<>(new Response(false, "Product size could not be found to be deleted.id=" + id), HttpStatus.NOT_FOUND);
 			}
 			
-			pwiService.deleteProductSize(productSize);
+			productSizeService.deleteProductSize(productSize);
 			
 			return new ResponseEntity<>(new Response(true, "Successfully deleted Product size id=" + id), HttpStatus.OK);
 		} catch (Exception e) {
