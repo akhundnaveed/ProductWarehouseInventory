@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.vantibolli.pwi.model.Country;
 
 /**
- * DAO class to perform CRUD operations for Country entity
+ * DAO class to perform database CRUD operations for Country entity
  * 
  * @author Naveed Ahmed
  * @version 1.0

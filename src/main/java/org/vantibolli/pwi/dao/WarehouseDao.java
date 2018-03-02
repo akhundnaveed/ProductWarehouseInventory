@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.vantibolli.pwi.model.Warehouse;
 
 /**
- * DAO class to perform CRUD operations for Warehouse entity
+ * DAO class to perform database CRUD operations for Warehouse entity
  * 
  * @author Naveed Ahmed
  * @version 1.0

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.vantibolli.pwi.model.Inventory;
 
 /**
- * DAO class to perform CRUD operations for Inventory entity
+ * DAO class to perform database CRUD operations for Inventory entity
  * 
  * @author Naveed Ahmed
  * @version 1.0

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.vantibolli.pwi.model.ProductSize;
 
 /**
- * DAO class to perform CRUD operations for ProductSize entity
+ * DAO class to perform database CRUD operations for ProductSize entity
  * 
  * @author Naveed Ahmed
  * @version 1.0

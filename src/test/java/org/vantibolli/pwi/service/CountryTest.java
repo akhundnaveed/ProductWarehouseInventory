@@ -25,8 +25,11 @@ import org.vantibolli.pwi.model.Country;
 import org.vantibolli.pwi.service.CountryService;
 
 /**
- * @author naveed
- *
+ * The class to test Country related operations
+ * 
+ * @author Naveed Ahmed
+ * @version 1.0
+ * @since 23-Feb-2018
  */
 public class CountryTest {
 	
@@ -39,19 +42,28 @@ public class CountryTest {
 	@Spy
 	private List<Country> countryList = new ArrayList<>();
 	
+	/**
+	 * Setup mockito mock objects and initialize test Country objects list
+	 */
 	@BeforeClass
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 		initCountryList();
 	}
 	
+	/**
+	 * Test listAllCountries service method
+	 */
 	@Test
-	public void listCountrys() {
+	public void listAllCountries() {
 		when(countryDao.findAll()).thenReturn(countryList);
 		List<Country> prodList = countryService.listAllCountries();
 		assertThat(prodList).isEqualTo(countryList);
 	}
 	
+	/**
+	 * Test saveCountry service method
+	 */
 	@Test
 	public void saveCountry() {
 		doNothing().when(countryDao).save(any(Country.class));
@@ -59,28 +71,40 @@ public class CountryTest {
 		verify(countryDao, atLeastOnce()).save(any(Country.class));
 	}
 	
+	/**
+	 * Test findCountryById service method
+	 */
 	@Test
-	public void findById() {
+	public void findCountryById() {
 		Country country = countryList.get(0);
 		when(countryDao.findOne(anyInt())).thenReturn(country);
 		assertThat(country).isEqualTo(countryService.findCountryById(country.getId()));
 	}
 	
+	/**
+	 * Test updateCountry service method
+	 */
 	@Test
-    public void updateCountry(){
+	public void updateCountry() {
 		Country country = countryList.get(0);
-        when(countryDao.findOne(anyInt())).thenReturn(country);
-        countryService.updateCountry(country);
-        verify(countryDao, atLeastOnce()).findOne(anyInt());
-    }
+		when(countryDao.findOne(anyInt())).thenReturn(country);
+		countryService.updateCountry(country);
+		verify(countryDao, atLeastOnce()).findOne(anyInt());
+	}
 	
+	/**
+	 * Test deleteCountry service method
+	 */
 	@Test
-    public void deleteCountry(){
-        doNothing().when(countryDao).delete(any(Country.class));
-        countryService.deleteCountry(any(Country.class));
-        verify(countryDao, atLeastOnce()).delete(any(Country.class));
-    }
+	public void deleteCountry() {
+		doNothing().when(countryDao).delete(any(Country.class));
+		countryService.deleteCountry(any(Country.class));
+		verify(countryDao, atLeastOnce()).delete(any(Country.class));
+	}
 	
+	/**
+	 * Initialize a test Country list
+	 */
 	private void initCountryList() {
 		Country country = new Country();
 		country.setId(7);

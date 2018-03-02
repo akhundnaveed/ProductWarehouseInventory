@@ -25,8 +25,11 @@ import org.vantibolli.pwi.model.ProductSize;
 import org.vantibolli.pwi.service.ProductSizeService;
 
 /**
- * @author naveed
- *
+ * The class to test Product size related operations
+ * 
+ * @author Naveed Ahmed
+ * @version 1.0
+ * @since 23-Feb-2018
  */
 public class ProductSizeTest {
 	
@@ -38,34 +41,49 @@ public class ProductSizeTest {
 	
 	@Spy
 	private List<ProductSize> productSizeList = new ArrayList<>();
-	
+
+	/**
+	 * Setup mockito mock objects and initialize test Product size objects list
+	 */
 	@BeforeClass
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 		initProductSizeList();
 	}
-	
+
+	/**
+	 * Test listAllProductSizes service method
+	 */
 	@Test
 	public void listProductSizes() {
 		when(productSizeDao.findAll()).thenReturn(productSizeList);
 		List<ProductSize> prodList = productSizeService.listAllProductSizes();
 		assertThat(prodList).isEqualTo(productSizeList);
 	}
-	
+
+	/**
+	 * Test saveProductSize service method
+	 */
 	@Test
 	public void saveProductSize() {
 		doNothing().when(productSizeDao).save(any(ProductSize.class));
 		productSizeService.addProductSize(any(ProductSize.class));
 		verify(productSizeDao, atLeastOnce()).save(any(ProductSize.class));
 	}
-	
+
+	/**
+	 * Test findProductSizeById service method
+	 */
 	@Test
-	public void findById() {
+	public void findProductSizeById() {
 		ProductSize productSize = productSizeList.get(0);
 		when(productSizeDao.findOne(anyInt())).thenReturn(productSize);
 		assertThat(productSize).isEqualTo(productSizeService.findProductSizeById(productSize.getId()));
 	}
-	
+
+	/**
+	 * Test updateProductSize service method
+	 */
 	@Test
     public void updateProductSize(){
 		ProductSize productSize = productSizeList.get(0);
@@ -73,14 +91,20 @@ public class ProductSizeTest {
         productSizeService.updateProductSize(productSize);
         verify(productSizeDao, atLeastOnce()).findOne(anyInt());
     }
-	
+
+	/**
+	 * Test deleteProductSize service method
+	 */
 	@Test
     public void deleteProductSize(){
         doNothing().when(productSizeDao).delete(any(ProductSize.class));
         productSizeService.deleteProductSize(any(ProductSize.class));
         verify(productSizeDao, atLeastOnce()).delete(any(ProductSize.class));
     }
-	
+
+	/**
+	 * Initialize a test Product size list
+	 */
 	private void initProductSizeList() {
 		ProductSize productSize = new ProductSize();
 		productSize.setId(4);

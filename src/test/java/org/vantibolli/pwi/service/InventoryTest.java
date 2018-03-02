@@ -25,8 +25,11 @@ import org.vantibolli.pwi.model.Inventory;
 import org.vantibolli.pwi.service.InventoryService;
 
 /**
- * @author naveed
- *
+ * The class to test Inventory related operations
+ * 
+ * @author Naveed Ahmed
+ * @version 1.0
+ * @since 23-Feb-2018
  */
 public class InventoryTest {
 	
@@ -39,12 +42,18 @@ public class InventoryTest {
 	@Spy
 	private List<Inventory> inventoryList = new ArrayList<>();
 	
+	/**
+	 * Setup mockito mock objects and initialize test Inventory objects list
+	 */
 	@BeforeClass
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 		initInventoryList();
 	}
 	
+	/**
+	 * Test listAllInventories service method
+	 */
 	@Test
 	public void listInventories() {
 		when(inventoryDao.findAll()).thenReturn(inventoryList);
@@ -52,6 +61,9 @@ public class InventoryTest {
 		assertThat(prodList).isEqualTo(inventoryList);
 	}
 	
+	/**
+	 * Test listAllInventoriesByCountryId service method
+	 */
 	@Test
 	public void listInventoriesByCountryId() {
 		when(inventoryDao.findInventoriesByCountryId(anyInt())).thenReturn(inventoryList);
@@ -59,6 +71,9 @@ public class InventoryTest {
 		assertThat(prodList).isEqualTo(inventoryList);
 	}
 	
+	/**
+	 * Test listAllInventoriesByWarehouseId service method
+	 */
 	@Test
 	public void listInventoriesByWarehouseId() {
 		when(inventoryDao.findInventoriesByWarehouseId(anyInt())).thenReturn(inventoryList);
@@ -66,6 +81,9 @@ public class InventoryTest {
 		assertThat(prodList).isEqualTo(inventoryList);
 	}
 	
+	/**
+	 * Test saveInventory service method
+	 */
 	@Test
 	public void saveInventory() {
 		doNothing().when(inventoryDao).save(any(Inventory.class));
@@ -73,28 +91,40 @@ public class InventoryTest {
 		verify(inventoryDao, atLeastOnce()).save(any(Inventory.class));
 	}
 	
+	/**
+	 * Test findInventoryById service method
+	 */
 	@Test
-	public void findById() {
+	public void findInventoryById() {
 		Inventory inventory = inventoryList.get(0);
 		when(inventoryDao.findOne(anyInt())).thenReturn(inventory);
 		assertThat(inventory).isEqualTo(inventoryService.findInventoryById(inventory.getId()));
 	}
 	
+	/**
+	 * Test updateInventory service method
+	 */
 	@Test
-    public void updateInventory(){
+	public void updateInventory() {
 		Inventory inventory = inventoryList.get(0);
-        when(inventoryDao.findOne(anyInt())).thenReturn(inventory);
-        inventoryService.updateInventory(inventory);
-        verify(inventoryDao, atLeastOnce()).findOne(anyInt());
-    }
+		when(inventoryDao.findOne(anyInt())).thenReturn(inventory);
+		inventoryService.updateInventory(inventory);
+		verify(inventoryDao, atLeastOnce()).findOne(anyInt());
+	}
 	
+	/**
+	 * Test deleteInventory service method
+	 */
 	@Test
-    public void deleteInventory(){
-        doNothing().when(inventoryDao).delete(any(Inventory.class));
-        inventoryService.deleteInventory(any(Inventory.class));
-        verify(inventoryDao, atLeastOnce()).delete(any(Inventory.class));
-    }
+	public void deleteInventory() {
+		doNothing().when(inventoryDao).delete(any(Inventory.class));
+		inventoryService.deleteInventory(any(Inventory.class));
+		verify(inventoryDao, atLeastOnce()).delete(any(Inventory.class));
+	}
 	
+	/**
+	 * Initialize a test Inventory list
+	 */
 	private void initInventoryList() {
 		Inventory inventory = new Inventory();
 		inventory.setId(11);

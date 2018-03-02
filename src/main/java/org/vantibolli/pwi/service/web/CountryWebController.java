@@ -27,8 +27,11 @@ import org.vantibolli.pwi.service.InventoryService;
 import org.vantibolli.pwi.service.WarehouseService;
 
 /**
- * @author naveed
- *
+ * The Spring web service controller class to handle Country related operations
+ * 
+ * @author Naveed Ahmed
+ * @version 1.0
+ * @since 23-Feb-2018
  */
 @Controller
 @RequestMapping("/country")
@@ -45,8 +48,13 @@ public class CountryWebController {
 	@Autowired
 	private WarehouseService warehouseService;
 	
+	/**
+	 * Get a list of all Countries from the database
+	 * 
+	 * @return list of Countries
+	 */
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<Object> listCountries() {
+	public ResponseEntity<Object> listAllCountries() {
 		try {
 			logger.info("Getting list of countries");
 			List<Country> countryList = countryService.listAllCountries();
@@ -63,6 +71,13 @@ public class CountryWebController {
 		}
 	}
 	
+	/**
+	 * Find Country object from the database against given country id
+	 * 
+	 * @param id
+	 *            the id of Country to find
+	 * @return Country object found from the database
+	 */
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
 	public ResponseEntity<Object> findCountry(@PathVariable Integer id) {
 		try {
@@ -85,6 +100,15 @@ public class CountryWebController {
 		}
 	}
 	
+	/**
+	 * Store given Country object record in the database
+	 * 
+	 * @param country
+	 *            the Country object to be stored in the database
+	 * @param ucBuilder
+	 *            the builder object to expose a URI for newly created Country record
+	 * @return the response object with success true/false and message about the operation performed successfully or not
+	 */
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Response> addCountry(@RequestBody Country country, UriComponentsBuilder ucBuilder) {
 		try {
@@ -107,8 +131,17 @@ public class CountryWebController {
 		}
 	}
 	
+	/**
+	 * Update given Country object record in the database
+	 * 
+	 * @param id
+	 *            the id of the Country object to be updated in the database
+	 * @param country
+	 *            the Country object to be updated in the database
+	 * @return the response object with success true/false and message about the operation performed successfully or not
+	 */
 	@RequestMapping(value = "{id}", method = RequestMethod.PUT)
-	public ResponseEntity<Response> updateCountry(@PathVariable Integer id, @RequestBody Country country, UriComponentsBuilder ucBuilder) {
+	public ResponseEntity<Response> updateCountry(@PathVariable Integer id, @RequestBody Country country) {
 		try {
 			logger.info("Update country {}", country);
 			
@@ -128,6 +161,13 @@ public class CountryWebController {
 		}
 	}
 	
+	/**
+	 * Delete the given Country object from the database
+	 * 
+	 * @param id
+	 *            the id of Country object to be deleted from the database
+	 * @return the response object with success true/false and message about the operation performed successfully or not
+	 */
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Object> deleteCountry(@PathVariable Integer id) {
 		try {
@@ -152,6 +192,13 @@ public class CountryWebController {
 		}
 	}
 	
+	/**
+	 * Get list of all Warehouses from the database against given country id
+	 * 
+	 * @param countryId
+	 *            the id of Country against which the list of Warehouses will be returned
+	 * @return list of Warehouses
+	 */
 	@RequestMapping(value = "{id}/warehouses", method = RequestMethod.GET)
 	public ResponseEntity<Object> findWarehousesByCountryId(@PathVariable Integer id) {
 		try {
@@ -177,11 +224,19 @@ public class CountryWebController {
 			return new ResponseEntity<>(warehouseList, HttpStatus.OK);
 		} catch (Exception e) {
 			logger.error("Error occurred while finding Warehouses against given country id", e);
-			return new ResponseEntity<>(new Response(false, "Error occurred while finding Warehouses against given country id." + e.getMessage()),
+			return new ResponseEntity<>(
+					new Response(false, "Error occurred while finding Warehouses against given country id." + e.getMessage()),
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
+	/**
+	 * Get a list of Inventories from the database against given country id
+	 * 
+	 * @param countryId
+	 *            the id of Country against which the list of Inventories will be returned
+	 * @return list of Inventories
+	 */
 	@RequestMapping(value = "{id}/inventories", method = RequestMethod.GET)
 	public ResponseEntity<Object> findInventoriesByCountryId(@PathVariable Integer id) {
 		try {
@@ -207,7 +262,8 @@ public class CountryWebController {
 			return new ResponseEntity<>(inventoryList, HttpStatus.OK);
 		} catch (Exception e) {
 			logger.error("Error occurred while finding Inventories against given country id", e);
-			return new ResponseEntity<>(new Response(false, "Error occurred while finding Inventories against given country id." + e.getMessage()),
+			return new ResponseEntity<>(
+					new Response(false, "Error occurred while finding Inventories against given country id." + e.getMessage()),
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}

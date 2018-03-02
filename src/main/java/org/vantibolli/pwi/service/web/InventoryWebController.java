@@ -22,18 +22,26 @@ import org.vantibolli.pwi.model.Inventory;
 import org.vantibolli.pwi.service.InventoryService;
 
 /**
- * @author naveed
- *
+ * The Spring web service controller class to perform Inventory related operations
+ * 
+ * @author Naveed Ahmed
+ * @version 1.0
+ * @since 23-Feb-2018
  */
 @Controller
 @RequestMapping("/inventory")
 public class InventoryWebController {
 	
 	private static Logger logger = LoggerFactory.getLogger(InventoryWebController.class);
-
+	
 	@Autowired
 	private InventoryService inventoryService;
 	
+	/**
+	 * Get a list of Inventories from the database
+	 * 
+	 * @return list of Inventories
+	 */
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<Object> listInventories() {
 		try {
@@ -52,6 +60,13 @@ public class InventoryWebController {
 		}
 	}
 	
+	/**
+	 * Find Inventory object from database against given inventory id
+	 * 
+	 * @param id
+	 *            the id of Inventory to find
+	 * @return Inventory object found from the database
+	 */
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
 	public ResponseEntity<Object> findInventory(@PathVariable Integer id) {
 		try {
@@ -63,7 +78,8 @@ public class InventoryWebController {
 			Inventory inventory = inventoryService.findInventoryById(id);
 			
 			if (inventory == null) {
-				return new ResponseEntity<>(new Response(false, "Inventory not found against given inventory id:" + id), HttpStatus.NOT_FOUND);
+				return new ResponseEntity<>(new Response(false, "Inventory not found against given inventory id:" + id),
+						HttpStatus.NOT_FOUND);
 			}
 			
 			return new ResponseEntity<>(inventory, HttpStatus.OK);
@@ -74,6 +90,15 @@ public class InventoryWebController {
 		}
 	}
 	
+	/**
+	 * Store given Inventory object record in the database
+	 * 
+	 * @param inventory
+	 *            the Inventory object to be stored in the database
+	 * @param ucBuilder
+	 *            the builder object to expose a URI for newly created Inventory record
+	 * @return the response object with success true/false and message about the operation performed successfully or not
+	 */
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Response> addInventory(@RequestBody Inventory inventory, UriComponentsBuilder ucBuilder) {
 		try {
@@ -102,8 +127,17 @@ public class InventoryWebController {
 		}
 	}
 	
+	/**
+	 * Update given Inventory object record in the database
+	 * 
+	 * @param id
+	 *            the id of Inventory object to be updated in the database
+	 * @param inventory
+	 *            the Inventory object to be updated in the database
+	 * @return the response object with success true/false and message about the operation performed successfully or not
+	 */
 	@RequestMapping(value = "{id}", method = RequestMethod.PUT)
-	public ResponseEntity<Response> updateInventory(@PathVariable Integer id, @RequestBody Inventory inventory, UriComponentsBuilder ucBuilder) {
+	public ResponseEntity<Response> updateInventory(@PathVariable Integer id, @RequestBody Inventory inventory) {
 		try {
 			logger.info("Update inventory {}", inventory);
 			
@@ -129,6 +163,13 @@ public class InventoryWebController {
 		}
 	}
 	
+	/**
+	 * Delete the given Inventory object from the database
+	 * 
+	 * @param id
+	 *            the id of Inventory object to be deleted from the database
+	 * @return the response object with success true/false and message about the operation performed successfully or not
+	 */
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Object> deleteInventory(@PathVariable Integer id) {
 		try {
@@ -140,7 +181,8 @@ public class InventoryWebController {
 			Inventory inventory = inventoryService.findInventoryById(id);
 			
 			if (inventory == null) {
-				return new ResponseEntity<>(new Response(false, "Inventory could not be found to be deleted.id=" + id), HttpStatus.NOT_FOUND);
+				return new ResponseEntity<>(new Response(false, "Inventory could not be found to be deleted.id=" + id),
+						HttpStatus.NOT_FOUND);
 			}
 			
 			inventoryService.deleteInventory(inventory);

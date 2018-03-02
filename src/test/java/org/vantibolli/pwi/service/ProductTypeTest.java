@@ -25,8 +25,11 @@ import org.vantibolli.pwi.model.ProductType;
 import org.vantibolli.pwi.service.ProductTypeService;
 
 /**
- * @author naveed
- *
+ * The class to test Product type related operations
+ * 
+ * @author Naveed Ahmed
+ * @version 1.0
+ * @since 23-Feb-2018
  */
 public class ProductTypeTest {
 	
@@ -39,19 +42,28 @@ public class ProductTypeTest {
 	@Spy
 	private List<ProductType> productTypeList = new ArrayList<>();
 	
+	/**
+	 * Setup mockito mock objects and initialize test Product type objects list
+	 */
 	@BeforeClass
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 		initProductTypeList();
 	}
 	
+	/**
+	 * Test listAllProductTypes service method
+	 */
 	@Test
-	public void listProductTypes() {
+	public void listAllProductTypes() {
 		when(productTypeDao.findAll()).thenReturn(productTypeList);
 		List<ProductType> prodList = productTypeService.listAllProductTypes();
 		assertThat(prodList).isEqualTo(productTypeList);
 	}
 	
+	/**
+	 * Test saveProductType service method
+	 */
 	@Test
 	public void saveProductType() {
 		doNothing().when(productTypeDao).save(any(ProductType.class));
@@ -59,28 +71,40 @@ public class ProductTypeTest {
 		verify(productTypeDao, atLeastOnce()).save(any(ProductType.class));
 	}
 	
+	/**
+	 * Test findProductTypeById service method
+	 */
 	@Test
-	public void findById() {
+	public void findProductTypeById() {
 		ProductType productType = productTypeList.get(0);
 		when(productTypeDao.findOne(anyInt())).thenReturn(productType);
 		assertThat(productType).isEqualTo(productTypeService.findProductTypeById(productType.getId()));
 	}
 	
+	/**
+	 * Test updateProductType service method
+	 */
 	@Test
-    public void updateProductType(){
+	public void updateProductType() {
 		ProductType productType = productTypeList.get(0);
-        when(productTypeDao.findOne(anyInt())).thenReturn(productType);
-        productTypeService.updateProductType(productType);
-        verify(productTypeDao, atLeastOnce()).findOne(anyInt());
-    }
+		when(productTypeDao.findOne(anyInt())).thenReturn(productType);
+		productTypeService.updateProductType(productType);
+		verify(productTypeDao, atLeastOnce()).findOne(anyInt());
+	}
 	
+	/**
+	 * Test deleteProductType service method
+	 */
 	@Test
-    public void deleteProductType(){
-        doNothing().when(productTypeDao).delete(any(ProductType.class));
-        productTypeService.deleteProductType(any(ProductType.class));
-        verify(productTypeDao, atLeastOnce()).delete(any(ProductType.class));
-    }
+	public void deleteProductType() {
+		doNothing().when(productTypeDao).delete(any(ProductType.class));
+		productTypeService.deleteProductType(any(ProductType.class));
+		verify(productTypeDao, atLeastOnce()).delete(any(ProductType.class));
+	}
 	
+	/**
+	 * Initialize a test Product type list
+	 */
 	private void initProductTypeList() {
 		ProductType productType = new ProductType();
 		productType.setId(1);

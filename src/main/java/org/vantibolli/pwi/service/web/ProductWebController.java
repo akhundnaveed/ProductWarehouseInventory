@@ -23,8 +23,11 @@ import org.vantibolli.pwi.model.Product;
 import org.vantibolli.pwi.service.ProductService;
 
 /**
- * @author naveed
- *
+ * The Spring web service controller class to perform Product related operations
+ * 
+ * @author Naveed Ahmed
+ * @version 1.0
+ * @since 23-Feb-2018
  */
 @Controller
 @RequestMapping("/product")
@@ -35,6 +38,11 @@ public class ProductWebController {
 	@Autowired
 	private ProductService productService;
 	
+	/**
+	 * Get list of all Products from the database
+	 * 
+	 * @return list of Products
+	 */
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<Object> listProducts() {
 		try {
@@ -53,6 +61,13 @@ public class ProductWebController {
 		}
 	}
 	
+	/**
+	 * Find Product object from database against given product id
+	 * 
+	 * @param id
+	 *            the id of Product to find
+	 * @return Product object found from the database
+	 */
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
 	public ResponseEntity<Object> findProduct(@PathVariable Integer id) {
 		try {
@@ -75,6 +90,15 @@ public class ProductWebController {
 		}
 	}
 	
+	/**
+	 * Store given Product object record in the database
+	 * 
+	 * @param product
+	 *            the Product object to be stored in the database
+	 * @param ucBuilder
+	 *            the builder object to expose a URI for newly created Product record
+	 * @return the response object with success true/false and message about the operation performed successfully or not
+	 */
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Response> addProduct(@RequestBody Product product, UriComponentsBuilder ucBuilder) {
 		try {
@@ -99,8 +123,17 @@ public class ProductWebController {
 		}
 	}
 	
+	/**
+	 * Update given Product object record in the database
+	 * 
+	 * @param id
+	 *            the id of the Product object to be updated
+	 * @param product
+	 *            the Product object to be deleted from the database
+	 * @return the response object with success true/false and message about the operation performed successfully or not
+	 */
 	@RequestMapping(value = "{id}", method = RequestMethod.PUT)
-	public ResponseEntity<Response> updateProduct(@PathVariable Integer id, @RequestBody Product product, UriComponentsBuilder ucBuilder) {
+	public ResponseEntity<Response> updateProduct(@PathVariable Integer id, @RequestBody Product product) {
 		try {
 			logger.info("Update product {}", product);
 			
@@ -122,6 +155,13 @@ public class ProductWebController {
 		}
 	}
 	
+	/**
+	 * Delete the given Product object from the database
+	 * 
+	 * @param id
+	 *            the id of Product to be deleted from the database
+	 * @return the response object with success true/false and message about the operation performed successfully or not
+	 */
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Object> deleteProduct(@PathVariable Integer id) {
 		try {

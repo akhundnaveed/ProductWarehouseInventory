@@ -23,8 +23,11 @@ import org.vantibolli.pwi.model.ProductType;
 import org.vantibolli.pwi.service.ProductTypeService;
 
 /**
- * @author naveed
- *
+ * The Spring web service controller class to perform Product Type related operations
+ * 
+ * @author Naveed Ahmed
+ * @version 1.0
+ * @since 23-Feb-2018
  */
 @Controller
 @RequestMapping("/productType")
@@ -35,6 +38,11 @@ public class ProductTypeWebController {
 	@Autowired
 	private ProductTypeService productTypeService;
 	
+	/**
+	 * Get list of all Product Types from the database
+	 * 
+	 * @return list of Product Types
+	 */
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<Object> listProductTypes() {
 		try {
@@ -54,7 +62,13 @@ public class ProductTypeWebController {
 		}
 	}
 
-
+	/**
+	 * Find Product Type object from database against given product id
+	 * 
+	 * @param id
+	 *            the id of Product to find
+	 * @return Product Type object found from the database
+	 */
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
 	public ResponseEntity<Object> findProductType(@PathVariable Integer id) {
 		try {
@@ -62,11 +76,12 @@ public class ProductTypeWebController {
 			if (id == null) {
 				return new ResponseEntity<>(new Response(false, "Product Type id is missing"), HttpStatus.BAD_REQUEST);
 			}
-
+			
 			ProductType productType = productTypeService.findProductTypeById(id);
 			
 			if (productType == null) {
-				return new ResponseEntity<>(new Response(false, "Product type not found against given product type id:" + id), HttpStatus.NOT_FOUND);
+				return new ResponseEntity<>(new Response(false, "Product type not found against given product type id:" + id),
+						HttpStatus.NOT_FOUND);
 			}
 			
 			return new ResponseEntity<>(productType, HttpStatus.OK);
@@ -76,7 +91,16 @@ public class ProductTypeWebController {
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
+	/**
+	 * Store given Product Type object record in the database
+	 * 
+	 * @param productType
+	 *            the Product Type object to be stored in the database
+	 * @param ucBuilder
+	 *            the builder object to expose a URI for newly created Product Type record
+	 * @return the response object with success true/false and message about the operation performed successfully or not
+	 */
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Response> addProductType(@RequestBody ProductType productType, UriComponentsBuilder ucBuilder) {
 		try {
@@ -91,7 +115,8 @@ public class ProductTypeWebController {
 			HttpHeaders headers = new HttpHeaders();
 			headers.setLocation(ucBuilder.path("/productType/{id}").buildAndExpand(productType.getId()).toUri());
 			
-			return new ResponseEntity<>(new Response(true, "Successfully added Product Type. id:" + productType.getId()), HttpStatus.CREATED);
+			return new ResponseEntity<>(new Response(true, "Successfully added Product Type. id:" + productType.getId()),
+					HttpStatus.CREATED);
 		} catch (Exception e) {
 			logger.error("Error occurred while adding product", e);
 			return new ResponseEntity<>(new Response(false, "Error occurred while adding Product Type:" + e.getMessage()),
@@ -99,8 +124,17 @@ public class ProductTypeWebController {
 		}
 	}
 	
+	/**
+	 * Update given Product Type object record in the database
+	 * 
+	 * @param id
+	 *            the id of Product Type object to be updated in the database
+	 * @param product
+	 *            the Product Type object to be updated in the database
+	 * @return the response object with success true/false and message about the operation performed successfully or not
+	 */
 	@RequestMapping(value = "{id}", method = RequestMethod.PUT)
-	public ResponseEntity<Response> updateProductType(@PathVariable Integer id, @RequestBody ProductType productType, UriComponentsBuilder ucBuilder) {
+	public ResponseEntity<Response> updateProductType(@PathVariable Integer id, @RequestBody ProductType productType) {
 		try {
 			logger.info("Update product type {}", productType);
 			
@@ -120,6 +154,13 @@ public class ProductTypeWebController {
 		}
 	}
 
+	/**
+	 * Delete the given Product Type object from the database
+	 * 
+	 * @param id
+	 *            the id of Product Type object to be deleted from the database
+	 * @return the response object with success true/false and message about the operation performed successfully or not
+	 */
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Object> deleteProductType(@PathVariable Integer id) {
 		try {
@@ -131,7 +172,8 @@ public class ProductTypeWebController {
 			ProductType productType = productTypeService.findProductTypeById(id);
 			
 			if (productType == null) {
-				return new ResponseEntity<>(new Response(false, "Product type could not be found to be deleted.id=" + id), HttpStatus.NOT_FOUND);
+				return new ResponseEntity<>(new Response(false, "Product type could not be found to be deleted.id=" + id),
+						HttpStatus.NOT_FOUND);
 			}
 			
 			productTypeService.deleteProductType(productType);

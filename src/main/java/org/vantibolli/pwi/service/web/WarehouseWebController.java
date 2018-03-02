@@ -25,8 +25,11 @@ import org.vantibolli.pwi.service.InventoryService;
 import org.vantibolli.pwi.service.WarehouseService;
 
 /**
- * @author naveed
- *
+ * The Spring web service controller class to perform Warehouse related operations
+ * 
+ * @author Naveed Ahmed
+ * @version 1.0
+ * @since 23-Feb-2018
  */
 @Controller
 @RequestMapping("/warehouse")
@@ -36,10 +39,15 @@ public class WarehouseWebController {
 	
 	@Autowired
 	private WarehouseService warehouseService;
-
+	
 	@Autowired
 	private InventoryService inventoryService;
 	
+	/**
+	 * Get list of all Warehouses from the database
+	 * 
+	 * @return list of Warehouses
+	 */
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<Object> listWarehouses() {
 		try {
@@ -58,6 +66,13 @@ public class WarehouseWebController {
 		}
 	}
 	
+	/**
+	 * Find Warehouse object from database against given warehouse id
+	 * 
+	 * @param id
+	 *            the id of Warehouse to find
+	 * @return Warehouse object found from the database
+	 */
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
 	public ResponseEntity<Object> findWarehouse(@PathVariable Integer id) {
 		try {
@@ -81,6 +96,15 @@ public class WarehouseWebController {
 		}
 	}
 	
+	/**
+	 * Store given Warehouse object record in the database
+	 * 
+	 * @param Warehouse
+	 *            the Warehouse object to be stored in the database
+	 * @param ucBuilder
+	 *            the builder object to expose a URI for newly created Warehouse record
+	 * @return the response object with success true/false and message about the operation performed successfully or not
+	 */
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Response> addWarehouse(@RequestBody Warehouse warehouse, UriComponentsBuilder ucBuilder) {
 		try {
@@ -105,9 +129,17 @@ public class WarehouseWebController {
 		}
 	}
 	
+	/**
+	 * Update given Warehouse object record in the database
+	 * 
+	 * @param id
+	 *            the id of Warehouse object to be updated in the database
+	 * @param warehouse
+	 *            the Warehouse object to be updated in the database
+	 * @return the response object with success true/false and message about the operation performed successfully or not
+	 */
 	@RequestMapping(value = "{id}", method = RequestMethod.PUT)
-	public ResponseEntity<Response> updateWarehouse(@PathVariable Integer id, @RequestBody Warehouse warehouse,
-			UriComponentsBuilder ucBuilder) {
+	public ResponseEntity<Response> updateWarehouse(@PathVariable Integer id, @RequestBody Warehouse warehouse) {
 		try {
 			logger.info("Update warehouse {}", warehouse);
 			
@@ -129,6 +161,13 @@ public class WarehouseWebController {
 		}
 	}
 	
+	/**
+	 * Delete the given Warehouse object from the database
+	 * 
+	 * @param id
+	 *            the id of Warehouse object to be deleted from the database
+	 * @return the response object with success true/false and message about the operation performed successfully or not
+	 */
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Object> deleteWarehouse(@PathVariable Integer id) {
 		try {
@@ -154,6 +193,13 @@ public class WarehouseWebController {
 		}
 	}
 	
+	/**
+	 * Get a list of Inventories from the database against given warehouse id
+	 * 
+	 * @param warehouseId
+	 *            the id of Warehouse against which the list of Inventories will be returned
+	 * @return list of Inventories
+	 */
 	@RequestMapping(value = "{id}/inventories", method = RequestMethod.GET)
 	public ResponseEntity<Object> findInvetoriesByWarehouseId(@PathVariable Integer id) {
 		try {
@@ -180,7 +226,8 @@ public class WarehouseWebController {
 			return new ResponseEntity<>(inventoryList, HttpStatus.OK);
 		} catch (Exception e) {
 			logger.error("Error occurred while finding list of Inventories against given warehouse id", e);
-			return new ResponseEntity<>(new Response(false, "Error occurred while finding Inventories against given warehouse id." + e.getMessage()),
+			return new ResponseEntity<>(
+					new Response(false, "Error occurred while finding Inventories against given warehouse id." + e.getMessage()),
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}

@@ -74,6 +74,7 @@ public class HibernateConfig {
 		props.put("hibernate.dialect", env.getProperty("hibernate.dialect"));
 		
 		factoryBean.setHibernateProperties(props);
+		factoryBean.setPackagesToScan(new String[] { "org.vantibolli.pwi.model"});
 		
 		// TODO Add All Entity classes here
 		factoryBean.setAnnotatedClasses(Product.class);

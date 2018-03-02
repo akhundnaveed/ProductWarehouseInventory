@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.vantibolli.pwi.model.ProductType;
 
 /**
- * DAO class to perform CRUD operations for ProductType entity
+ * DAO class to perform database CRUD operations for ProductType entity
  * 
  * @author Naveed Ahmed
  * @version 1.0
