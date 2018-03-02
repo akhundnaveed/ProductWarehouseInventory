@@ -13,55 +13,95 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * @author naveed
- *
+ * The Country entity class mapped with country table
+ * 
+ * @author Naveed Ahmed
+ * @version 1.0
+ * @since 23-Feb-2018
  */
 @Entity
 @Table(name = "country")
 public class Country implements Serializable {
-
+	
 	/**
-	 * 
+	 * The serial version id
 	 */
 	private static final long serialVersionUID = 2973679793032681940L;
-
+	
+	/**
+	 * The unique id for Country entity
+	 */
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY) 
-	@Column(name="id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Integer id;
 	
-	@Column(name="name")
+	/**
+	 * The name of the Country
+	 */
+	@Column(name = "name")
 	private String name;
+	
+	/**
+	 * No arguments constructor
+	 */
+	public Country() {
+	}
 
 	/**
-	 * @return the id
+	 * @param id
+	 *           the unique id for Country entity
+	 * @param name
+	 *            the name of the Country entity
+	 */
+	public Country(Integer id, String name) {
+		this.id = id;
+		this.name = name;
+	}
+
+	/**
+	 * Get the unique id for Country entity
+	 * 
+	 * @return id
+	 *            the id of Country entity
 	 */
 	public Integer getId() {
 		return id;
 	}
-
+	
 	/**
-	 * @param id the id to set
+	 * Set the unique id for Country entity
+	 * 
+	 * @param id
+	 *            the id of Country entity
 	 */
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
+	
 	/**
-	 * @return the name
+	 * Get the name of Country
+	 * 
+	 * @return name
+	 *              the name of Country
 	 */
 	public String getName() {
 		return name;
 	}
-
+	
 	/**
-	 * @param name the name to set
+	 * Set the name of Country
+	 * 
+	 * @param name
+	 *            the name of Country
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	/* (non-Javadoc)
+	
+	/**
+	 * Get all properties values of the Country entity as string
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

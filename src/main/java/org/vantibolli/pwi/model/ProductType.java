@@ -13,55 +13,93 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * @author naveed
- *
+ * The ProductType entity class mapped to product type table
+ * 
+ * @author Naveed Ahmed
+ * @version 1.0
+ * @since 23-Feb-2018
  */
 @Entity
 @Table(name = "product_type")
 public class ProductType implements Serializable {
-
+	
 	/**
-	 * 
+	 * The serial version id
 	 */
 	private static final long serialVersionUID = -2059718286914668829L;
-
+	
+	/**
+	 * Unique id for ProductType entity
+	 */
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY) 
-	@Column(name="id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Integer id;
 	
-	@Column(name="type")
-	private String type;
-
 	/**
-	 * @return the id
+	 * The type of the ProductType entity
+	 */
+	@Column(name = "type")
+	private String type;
+	
+	/**
+	 * No arguments constructor
+	 */
+	public ProductType() {
+	}
+	
+	/**
+	 * @param id
+	 *            Unique id for ProductType entity
+	 * @param type
+	 *            the type of the ProductType entity
+	 */
+	public ProductType(Integer id, String type) {
+		this.id = id;
+		this.type = type;
+	}
+	
+	/**
+	 * Get the unique id for ProductType entity
+	 * 
+	 * @return id the id of ProductType entity
 	 */
 	public Integer getId() {
 		return id;
 	}
-
+	
 	/**
-	 * @param id the id to set
+	 * Set the unique id for ProductType entity
+	 * 
+	 * @param id
+	 *            the id of ProductType entity
 	 */
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
+	
 	/**
-	 * @return the type
+	 * Get the type for ProductType entity
+	 * 
+	 * @return type the type of ProductType entity
 	 */
 	public String getType() {
 		return type;
 	}
-
+	
 	/**
-	 * @param type the type to set
+	 * Set the type for ProductType entity
+	 * 
+	 * @param type
+	 *            the type of ProductType entity
 	 */
 	public void setType(String type) {
 		this.type = type;
 	}
-
-	/* (non-Javadoc)
+	
+	/**
+	 * Get all properties values of the ProductType entity as string
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

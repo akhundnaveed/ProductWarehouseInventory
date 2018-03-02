@@ -12,12 +12,16 @@ import org.springframework.stereotype.Repository;
 import org.vantibolli.pwi.model.Warehouse;
 
 /**
- * @author naveed
- *
+ * DAO class to perform CRUD operations for Warehouse entity
+ * 
+ * @author Naveed Ahmed
+ * @version 1.0
+ * @since 23-Feb-2018
  */
 @Repository
-public class WarehouseDao extends AbstractDao<Warehouse> {
+public class WarehouseDao extends AbstractDao<Warehouse, Integer> {
 
+	@SuppressWarnings("unchecked")
 	@Transactional
 	public List<Warehouse> findWarehousesByCountryId(Integer countryId) {
 		Query query = getCurrentSession().createQuery("from " + Warehouse.class.getName() + " where country.id = " + countryId);

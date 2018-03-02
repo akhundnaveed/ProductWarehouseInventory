@@ -25,8 +25,13 @@ import org.vantibolli.pwi.model.ProductType;
 import org.vantibolli.pwi.model.Warehouse;
 
 /**
- * @author naveed
- *
+ * <h1>HibernateConfig</h1>
+ * This class contains Spring configurations to user Hibernate ORM to connect to database. The hibernate sessionFactory bean is created to be used in DAO classes.
+ * The hibernate transaction manager instance is also created. Tomcat dbcp BasicDataSource is also created which uses database connections pool.
+ * 
+ * @author Naveed Ahmed
+ * @version 1.0
+ * @since 23-Feb-2018
  */
 @Configuration
 @PropertySource("classpath:db.properties")
@@ -38,6 +43,7 @@ public class HibernateConfig {
 	private Environment env;
 	
 	/**
+	 * This method creates a Spring Bean and returns the {@code DataSource} of specified database
 	 * 
 	 * @return DataSource
 	 */
@@ -53,6 +59,7 @@ public class HibernateConfig {
 	}
 	
 	/**
+	 * This method creates a Spring Bean and returns the Hibernate {@code SessionFactory} object
 	 * 
 	 * @return LocalSessionFactoryBean
 	 */
@@ -67,8 +74,8 @@ public class HibernateConfig {
 		props.put("hibernate.dialect", env.getProperty("hibernate.dialect"));
 		
 		factoryBean.setHibernateProperties(props);
-		factoryBean.setPackagesToScan(new String[] { "org.vantibolli.pwi.model" });
 		
+		// TODO Add All Entity classes here
 		factoryBean.setAnnotatedClasses(Product.class);
 		factoryBean.setAnnotatedClasses(ProductSize.class);
 		factoryBean.setAnnotatedClasses(ProductType.class);
@@ -79,6 +86,11 @@ public class HibernateConfig {
 		return factoryBean;
 	}
 	
+	/**
+	 * This method creates a Spring Bean and returns the Hibernate {@code HibernateTransactionManager} object to make all Hibernate operations as transactional
+	 * 
+	 * @return HibernateTransactionManager
+	 */
 	@Bean
 	public HibernateTransactionManager getTransactionManager() {
 		HibernateTransactionManager transactionManager = new HibernateTransactionManager();

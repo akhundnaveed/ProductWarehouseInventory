@@ -13,87 +13,121 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * @author naveed
- *
+ * The Product entity class mapped to product table
+ * 
+ * @author Naveed Ahmed
+ * @version 1.0
+ * @since 23-Feb-2018
  */
 @Entity
 @Table(name = "product")
 public class Product implements Serializable {
-
+	
 	/**
-	 * 
+	 * The serial version id
 	 */
 	private static final long serialVersionUID = 7936597457556875181L;
-
+	
+	/**
+	 * The unique id for Product entity
+	 */
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY) 
-	@Column(name="id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Integer id;
 	
-	@Column(name="name")
+	/**
+	 * the name of the Product entity
+	 */
+	@Column(name = "name")
 	private String name;
 	
-	@Column(name="code")
+	/**
+	 * the code of the Product entity
+	 */
+	@Column(name = "code")
 	private String code;
 	
+	/**
+	 * No arguments constructor
+	 */
 	public Product() {
-		
 	}
-
+	
 	/**
 	 * @param id
+	 *            the unique id for Product entity
 	 * @param name
+	 *            the name of the Product entity
 	 * @param code
+	 *            the code of the Product entity
 	 */
 	public Product(Integer id, String name, String code) {
 		this.id = id;
 		this.name = name;
 		this.code = code;
 	}
-
+	
 	/**
-	 * @return the id
+	 * Get the unique id for Product entity
+	 * 
+	 * @return id the id of Product entity
 	 */
 	public Integer getId() {
 		return id;
 	}
-
+	
 	/**
-	 * @param id the id to set
+	 * Set the unique id for Product entity
+	 * 
+	 * @param id
+	 *            the id of Product entity
 	 */
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
+	
 	/**
-	 * @return the name
+	 * Get the name for Product entity
+	 * 
+	 * @return name the name of Product entity
 	 */
 	public String getName() {
 		return name;
 	}
-
+	
 	/**
-	 * @param name the name to set
+	 * Set the name for Product entity
+	 * 
+	 * @param name
+	 *            the name of Product entity
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
-
+	
 	/**
-	 * @return the code
+	 * Get the code for Product entity
+	 * 
+	 * @return code the code of Product entity
 	 */
 	public String getCode() {
 		return code;
 	}
-
+	
 	/**
-	 * @param code the code to set
+	 * Set the name for Product entity
+	 * 
+	 * @param code
+	 *            the code of Product entity
 	 */
 	public void setCode(String code) {
 		this.code = code;
 	}
-
-	/* (non-Javadoc)
+	
+	/**
+	 * Get all properties values of the Product entity as string
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
