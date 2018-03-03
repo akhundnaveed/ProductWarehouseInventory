@@ -5,7 +5,6 @@ package org.vantibolli.pwi.config;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 /**
  * <h1>AppConfig</h1>
@@ -23,7 +22,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
  *
  */
 @Configuration
-@EnableWebMvc
 @ComponentScan(basePackages = { "org.vantibolli.pwi.service", "org.vantibolli.pwi.service.web" })
 public class AppConfig {
 	

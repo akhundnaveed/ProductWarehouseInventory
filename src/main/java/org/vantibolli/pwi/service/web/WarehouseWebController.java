@@ -24,6 +24,12 @@ import org.vantibolli.pwi.model.Warehouse;
 import org.vantibolli.pwi.service.InventoryService;
 import org.vantibolli.pwi.service.WarehouseService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 /**
  * The Spring web service controller class to perform Warehouse related operations
  * 
@@ -31,6 +37,7 @@ import org.vantibolli.pwi.service.WarehouseService;
  * @version 1.0
  * @since 23-Feb-2018
  */
+@Api(value = "Warehouse API", tags = { "Warehouse Web Services" })
 @Controller
 @RequestMapping("/warehouse")
 public class WarehouseWebController {
@@ -49,6 +56,10 @@ public class WarehouseWebController {
 	 * @return list of Warehouses
 	 */
 	@RequestMapping(method = RequestMethod.GET)
+	@ApiOperation(value = "Get a list of all Warehouses from the database", response = Warehouse.class, responseContainer = "List")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "List of warehouses fetched successfully"),
+			@ApiResponse(code = 500, message = "Internal Server Error", response = Response.class),
+			@ApiResponse(code = 404, message = "Not Found", response = Response.class) })
 	public ResponseEntity<Object> listWarehouses() {
 		try {
 			logger.info("Getting list of warehouses");
@@ -74,7 +85,13 @@ public class WarehouseWebController {
 	 * @return Warehouse object found from the database
 	 */
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
-	public ResponseEntity<Object> findWarehouse(@PathVariable Integer id) {
+	@ApiOperation(value = "Find Warehouse object from the database against given country id", response = Warehouse.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Warehouse record found"),
+			@ApiResponse(code = 500, message = "Internal Server Error", response = Response.class),
+			@ApiResponse(code = 400, message = "Bad Request", response = Response.class),
+			@ApiResponse(code = 404, message = "Not Found", response = Response.class) })
+	public ResponseEntity<Object> findWarehouse(
+			@PathVariable(name = "id", required = true) @ApiParam(name = "warehouse id", value = "the id of Warehouse to find", required = true) Integer id) {
 		try {
 			logger.info("Finding warehouse id: {}", id);
 			if (id == null) {
@@ -106,7 +123,12 @@ public class WarehouseWebController {
 	 * @return the response object with success true/false and message about the operation performed successfully or not
 	 */
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Response> addWarehouse(@RequestBody Warehouse warehouse, UriComponentsBuilder ucBuilder) {
+	@ApiOperation(value = "Store given Warehouse object record in the database", response = Response.class)
+	@ApiResponses(value = { @ApiResponse(code = 201, message = "Warehouse record created successfully"),
+			@ApiResponse(code = 500, message = "Internal Server Error"), @ApiResponse(code = 400, message = "Bad Request") })
+	public ResponseEntity<Response> addWarehouse(
+			@RequestBody(required = true) @ApiParam(name = "warehouse", value = "the Warehouse object to be stored in the database", required = true) Warehouse warehouse,
+			UriComponentsBuilder ucBuilder) {
 		try {
 			logger.info("Add warehouse {}", warehouse);
 			
@@ -139,7 +161,12 @@ public class WarehouseWebController {
 	 * @return the response object with success true/false and message about the operation performed successfully or not
 	 */
 	@RequestMapping(value = "{id}", method = RequestMethod.PUT)
-	public ResponseEntity<Response> updateWarehouse(@PathVariable Integer id, @RequestBody Warehouse warehouse) {
+	@ApiOperation(value = "Update given Warehouse object record in the database", response = Response.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Warehouse record updated successfully"),
+			@ApiResponse(code = 500, message = "Internal Server Error"), @ApiResponse(code = 400, message = "Bad Request") })
+	public ResponseEntity<Response> updateWarehouse(
+			@PathVariable(name = "id", required = true) @ApiParam(name = "warehouse id", value = "the id of Warehouse object to be updated in the database", required = true) Integer id,
+			@RequestBody(required = true) @ApiParam(name = "warehouse", value = "the Warehouse object to be updated in the database", required = true) Warehouse warehouse) {
 		try {
 			logger.info("Update warehouse {}", warehouse);
 			
@@ -169,7 +196,12 @@ public class WarehouseWebController {
 	 * @return the response object with success true/false and message about the operation performed successfully or not
 	 */
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<Object> deleteWarehouse(@PathVariable Integer id) {
+	@ApiOperation(value = "Delete the given Warehouse object from the database")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Warehouse record deleted successfully", response = Response.class),
+			@ApiResponse(code = 500, message = "Internal Server Error"), @ApiResponse(code = 400, message = "Bad Request"),
+			@ApiResponse(code = 404, message = "Not Found") })
+	public ResponseEntity<Object> deleteWarehouse(
+			@PathVariable(name = "id", required = true) @ApiParam(name = "warehouse id", value = "the id of Warehouse object to be deleted from the database", required = true) Integer id) {
 		try {
 			logger.info("Deleting warehouse id: {}", id);
 			if (id == null) {
@@ -201,7 +233,12 @@ public class WarehouseWebController {
 	 * @return list of Inventories
 	 */
 	@RequestMapping(value = "{id}/inventories", method = RequestMethod.GET)
-	public ResponseEntity<Object> findInvetoriesByWarehouseId(@PathVariable Integer id) {
+	@ApiOperation(value = "Get a list of all Inventories from the database against given warehouse id", response = Inventory.class, responseContainer = "List")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "List of inventories fetched successfully"),
+			@ApiResponse(code = 500, message = "Internal Server Error", response = Response.class),
+			@ApiResponse(code = 404, message = "Not Found", response = Response.class) })
+	public ResponseEntity<Object> findInvetoriesByWarehouseId(
+			@PathVariable(name = "id", required = true) @ApiParam(name = "warehouse id", value = "the id of Warehouse against which the list of Inventories will be returned", required = true) Integer id) {
 		try {
 			logger.info("Finding Inventories against warehouse id: {}", id);
 			if (id == null) {

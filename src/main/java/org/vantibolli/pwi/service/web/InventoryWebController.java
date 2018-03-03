@@ -21,6 +21,12 @@ import org.vantibolli.pwi.ext.Response;
 import org.vantibolli.pwi.model.Inventory;
 import org.vantibolli.pwi.service.InventoryService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 /**
  * The Spring web service controller class to perform Inventory related operations
  * 
@@ -28,6 +34,7 @@ import org.vantibolli.pwi.service.InventoryService;
  * @version 1.0
  * @since 23-Feb-2018
  */
+@Api(value = "Inventory API", tags = { "Inventory Web Services" })
 @Controller
 @RequestMapping("/inventory")
 public class InventoryWebController {
@@ -43,6 +50,10 @@ public class InventoryWebController {
 	 * @return list of Inventories
 	 */
 	@RequestMapping(method = RequestMethod.GET)
+	@ApiOperation(value = "Get a list of all Inventories from the database", response = Inventory.class, responseContainer = "List")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "List of inventories fetched successfully"),
+			@ApiResponse(code = 500, message = "Internal Server Error", response = Response.class),
+			@ApiResponse(code = 404, message = "Not Found", response = Response.class) })
 	public ResponseEntity<Object> listInventories() {
 		try {
 			logger.info("Getting list of inventories");
@@ -68,7 +79,13 @@ public class InventoryWebController {
 	 * @return Inventory object found from the database
 	 */
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
-	public ResponseEntity<Object> findInventory(@PathVariable Integer id) {
+	@ApiOperation(value = "Find Inventory object from the database against given inventory id", response = Inventory.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Inventory record found"),
+			@ApiResponse(code = 500, message = "Internal Server Error", response = Response.class),
+			@ApiResponse(code = 400, message = "Bad Request", response = Response.class),
+			@ApiResponse(code = 404, message = "Not Found", response = Response.class) })
+	public ResponseEntity<Object> findInventory(
+			@PathVariable(name = "id", required = true) @ApiParam(name = "inventory id", value = "the id of Inventory to find", required = true) Integer id) {
 		try {
 			logger.info("Finding inventory id: {}", id);
 			if (id == null) {
@@ -100,7 +117,12 @@ public class InventoryWebController {
 	 * @return the response object with success true/false and message about the operation performed successfully or not
 	 */
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Response> addInventory(@RequestBody Inventory inventory, UriComponentsBuilder ucBuilder) {
+	@ApiOperation(value = "Store given Inventory object record in the database", response = Response.class)
+	@ApiResponses(value = { @ApiResponse(code = 201, message = "Inventory record created successfully"),
+			@ApiResponse(code = 500, message = "Internal Server Error"), @ApiResponse(code = 400, message = "Bad Request") })
+	public ResponseEntity<Response> addInventory(
+			@RequestBody @ApiParam(name = "inventory", value = "the Inventory object to be stored in the database", required = true) Inventory inventory,
+			UriComponentsBuilder ucBuilder) {
 		try {
 			logger.info("Add inventory {}", inventory);
 			
@@ -137,7 +159,12 @@ public class InventoryWebController {
 	 * @return the response object with success true/false and message about the operation performed successfully or not
 	 */
 	@RequestMapping(value = "{id}", method = RequestMethod.PUT)
-	public ResponseEntity<Response> updateInventory(@PathVariable Integer id, @RequestBody Inventory inventory) {
+	@ApiOperation(value = "Update given Inventory object record in the database", response = Response.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Inventory record updated successfully"),
+			@ApiResponse(code = 500, message = "Internal Server Error"), @ApiResponse(code = 400, message = "Bad Request") })
+	public ResponseEntity<Response> updateInventory(
+			@PathVariable(name = "id", required = true) @ApiParam(name = "id", value = "the id of Inventory object to be updated in the database", required = true) Integer id,
+			@RequestBody(required = true) @ApiParam(name = "inventory", value = "the Inventory object to be updated in the database", required = true) Inventory inventory) {
 		try {
 			logger.info("Update inventory {}", inventory);
 			
@@ -171,7 +198,12 @@ public class InventoryWebController {
 	 * @return the response object with success true/false and message about the operation performed successfully or not
 	 */
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<Object> deleteInventory(@PathVariable Integer id) {
+	@ApiOperation(value = "Delete the given Inventory object from the database")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Inventory record deleted successfully", response = Response.class),
+			@ApiResponse(code = 500, message = "Internal Server Error"), @ApiResponse(code = 400, message = "Bad Request"),
+			@ApiResponse(code = 404, message = "Not Found") })
+	public ResponseEntity<Object> deleteInventory(
+			@PathVariable(name = "id", required = true) @ApiParam(name = "inventory id", value = "the id of Inventory object to be deleted from the database", required = true) Integer id) {
 		try {
 			logger.info("Deleting inventory id: {}", id);
 			if (id == null) {

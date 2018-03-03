@@ -1,0 +1,6 @@
+org.vantibolli.pwi.config
+org.vantibolli.pwi.dao
+org.vantibolli.pwi.ext
+org.vantibolli.pwi.model
+org.vantibolli.pwi.service
+org.vantibolli.pwi.service.web

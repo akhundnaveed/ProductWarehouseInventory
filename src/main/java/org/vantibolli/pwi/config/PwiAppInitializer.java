@@ -25,7 +25,7 @@ public class PwiAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 	 */
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
-		return new Class[] { AppConfig.class, HibernateConfig.class };
+		return new Class[] { AppConfig.class, HibernateConfig.class, SwaggerConfig.class };
 	}
 	
 	/**
@@ -45,7 +45,7 @@ public class PwiAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 	 */
 	@Override
 	protected String[] getServletMappings() {
-		return new String[] { "/" };
+		return new String[] { "/api/" };
 	}
 	
 }

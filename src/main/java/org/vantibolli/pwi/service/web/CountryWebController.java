@@ -26,6 +26,12 @@ import org.vantibolli.pwi.service.CountryService;
 import org.vantibolli.pwi.service.InventoryService;
 import org.vantibolli.pwi.service.WarehouseService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 /**
  * The Spring web service controller class to handle Country related operations
  * 
@@ -33,6 +39,7 @@ import org.vantibolli.pwi.service.WarehouseService;
  * @version 1.0
  * @since 23-Feb-2018
  */
+@Api(value = "Country API", tags = { "Country Web Services" })
 @Controller
 @RequestMapping("/country")
 public class CountryWebController {
@@ -54,6 +61,10 @@ public class CountryWebController {
 	 * @return list of Countries
 	 */
 	@RequestMapping(method = RequestMethod.GET)
+	@ApiOperation(value = "Get a list of all Countries from the database", response = Country.class, responseContainer = "List")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "List of countries fetched successfully"),
+			@ApiResponse(code = 500, message = "Internal Server Error", response = Response.class),
+			@ApiResponse(code = 404, message = "Not Found", response = Response.class) })
 	public ResponseEntity<Object> listAllCountries() {
 		try {
 			logger.info("Getting list of countries");
@@ -79,7 +90,13 @@ public class CountryWebController {
 	 * @return Country object found from the database
 	 */
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
-	public ResponseEntity<Object> findCountry(@PathVariable Integer id) {
+	@ApiOperation(value = "Find Country object from the database against given country id", response = Country.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Country record found"),
+			@ApiResponse(code = 500, message = "Internal Server Error", response = Response.class),
+			@ApiResponse(code = 400, message = "Bad Request", response = Response.class),
+			@ApiResponse(code = 404, message = "Not Found", response = Response.class) })
+	public ResponseEntity<Object> findCountry(
+			@PathVariable(name = "id", required = true) @ApiParam(name = "country id", value = "the id of Country to find", required = true) Integer id) {
 		try {
 			logger.info("Finding country id: {}", id);
 			if (id == null) {
@@ -110,7 +127,12 @@ public class CountryWebController {
 	 * @return the response object with success true/false and message about the operation performed successfully or not
 	 */
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Response> addCountry(@RequestBody Country country, UriComponentsBuilder ucBuilder) {
+	@ApiOperation(value = "Store given Country object record in the database", response = Response.class)
+	@ApiResponses(value = { @ApiResponse(code = 201, message = "Country record created successfully"),
+			@ApiResponse(code = 500, message = "Internal Server Error"), @ApiResponse(code = 400, message = "Bad Request") })
+	public ResponseEntity<Response> addCountry(
+			@RequestBody(required = true) @ApiParam(name = "country", value = "the Country object to be stored in the database", required = true) Country country,
+			UriComponentsBuilder ucBuilder) {
 		try {
 			logger.info("Add country {}", country);
 			
@@ -141,7 +163,12 @@ public class CountryWebController {
 	 * @return the response object with success true/false and message about the operation performed successfully or not
 	 */
 	@RequestMapping(value = "{id}", method = RequestMethod.PUT)
-	public ResponseEntity<Response> updateCountry(@PathVariable Integer id, @RequestBody Country country) {
+	@ApiOperation(value = "Update given Country object record in the database", response = Response.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Country record updated successfully"),
+			@ApiResponse(code = 500, message = "Internal Server Error"), @ApiResponse(code = 400, message = "Bad Request") })
+	public ResponseEntity<Response> updateCountry(
+			@PathVariable(name = "id", required = true) @ApiParam(name = "country id", value = "the id of the Country object to be updated in the database", required = true) Integer id,
+			@RequestBody(required = true) @ApiParam(name = "country", value = "the Country object to be updated in the database", required = true) Country country) {
 		try {
 			logger.info("Update country {}", country);
 			
@@ -169,7 +196,12 @@ public class CountryWebController {
 	 * @return the response object with success true/false and message about the operation performed successfully or not
 	 */
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<Object> deleteCountry(@PathVariable Integer id) {
+	@ApiOperation(value = "Delete the given Country object from the database")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Country record deleted successfully", response = Response.class),
+			@ApiResponse(code = 500, message = "Internal Server Error"), @ApiResponse(code = 400, message = "Bad Request"),
+			@ApiResponse(code = 404, message = "Not Found") })
+	public ResponseEntity<Object> deleteCountry(
+			@PathVariable(name = "id", required = true) @ApiParam(name = "country id", value = "the id of Country object to be deleted from the database", required = true) Integer id) {
 		try {
 			logger.info("Deleting country id: {}", id);
 			if (id == null) {
@@ -200,7 +232,13 @@ public class CountryWebController {
 	 * @return list of Warehouses
 	 */
 	@RequestMapping(value = "{id}/warehouses", method = RequestMethod.GET)
-	public ResponseEntity<Object> findWarehousesByCountryId(@PathVariable Integer id) {
+	@ApiOperation(value = "Get list of all Warehouses from the database against given country id", response = Warehouse.class, responseContainer = "List")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "List of warehouses against given country id fetched successfully"),
+			@ApiResponse(code = 500, message = "Internal Server Error", response = Response.class),
+			@ApiResponse(code = 400, message = "Bad Request", response = Response.class),
+			@ApiResponse(code = 404, message = "Not Found", response = Response.class) })
+	public ResponseEntity<Object> findWarehousesByCountryId(
+			@PathVariable(name = "id", required = true) @ApiParam(name = "country id", value = "the id of Country against which the list of Warehouses will be returned", required = true) Integer id) {
 		try {
 			logger.info("Finding Warehouses against country id: {}", id);
 			if (id == null) {
@@ -238,7 +276,13 @@ public class CountryWebController {
 	 * @return list of Inventories
 	 */
 	@RequestMapping(value = "{id}/inventories", method = RequestMethod.GET)
-	public ResponseEntity<Object> findInventoriesByCountryId(@PathVariable Integer id) {
+	@ApiOperation(value = "Get a list of Inventories from the database against given country id", response = Inventory.class, responseContainer = "List")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "List of inventories against given country id fetched successfully"),
+			@ApiResponse(code = 500, message = "Internal Server Error", response = Response.class),
+			@ApiResponse(code = 400, message = "Bad Request", response = Response.class),
+			@ApiResponse(code = 404, message = "Not Found", response = Response.class) })
+	public ResponseEntity<Object> findInventoriesByCountryId(
+			@PathVariable(name = "id", required = true) @ApiParam(name = "country id", value = "the id of Country against which the list of Inventories will be returned", required = true) Integer id) {
 		try {
 			logger.info("Finding Inventories against country id: {}", id);
 			if (id == null) {

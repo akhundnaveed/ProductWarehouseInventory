@@ -22,6 +22,12 @@ import org.vantibolli.pwi.ext.Response;
 import org.vantibolli.pwi.model.ProductSize;
 import org.vantibolli.pwi.service.ProductSizeService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 /**
  * The Spring web service controller class to perform Product Size related operations
  * 
@@ -29,6 +35,7 @@ import org.vantibolli.pwi.service.ProductSizeService;
  * @version 1.0
  * @since 23-Feb-2018
  */
+@Api(value = "ProductSize API", tags = { "Product Size Web Services" })
 @Controller
 @RequestMapping("/productSize")
 public class ProductSizeWebController {
@@ -44,6 +51,10 @@ public class ProductSizeWebController {
 	 * @return list of Product Sizes
 	 */
 	@RequestMapping(method = RequestMethod.GET)
+	@ApiOperation(value = "Get a list of all Product sizes from the database", response = ProductSize.class, responseContainer = "List")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "List of product sizes fetched successfully"),
+			@ApiResponse(code = 500, message = "Internal Server Error", response = Response.class),
+			@ApiResponse(code = 404, message = "Not Found", response = Response.class) })
 	public ResponseEntity<Object> listProductSizes() {
 		try {
 			logger.info("Getting list of product sizes");
@@ -69,7 +80,13 @@ public class ProductSizeWebController {
 	 * @return Product Size object found from the database
 	 */
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
-	public ResponseEntity<Object> findProductSize(@PathVariable Integer id) {
+	@ApiOperation(value = "Find ProductSize object from the database against given product size id", response = ProductSize.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "ProductSize record found"),
+			@ApiResponse(code = 500, message = "Internal Server Error", response = Response.class),
+			@ApiResponse(code = 400, message = "Bad Request", response = Response.class),
+			@ApiResponse(code = 404, message = "Not Found", response = Response.class) })
+	public ResponseEntity<Object> findProductSize(
+			@PathVariable(name = "id", required = true) @ApiParam(name = "product size id", value = "the id of Product to find", required = true) Integer id) {
 		try {
 			logger.info("Finding by product size id: {}", id);
 			if (id == null) {
@@ -101,7 +118,12 @@ public class ProductSizeWebController {
 	 * @return the response object with success true/false and message about the operation performed successfully or not
 	 */
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Response> addProductSize(@RequestBody ProductSize productSize, UriComponentsBuilder ucBuilder) {
+	@ApiOperation(value = "Store given Product size object record in the database", response = Response.class)
+	@ApiResponses(value = { @ApiResponse(code = 201, message = "Product size record created successfully"),
+			@ApiResponse(code = 500, message = "Internal Server Error"), @ApiResponse(code = 400, message = "Bad Request") })
+	public ResponseEntity<Response> addProductSize(
+			@RequestBody(required = true) @ApiParam(name = "product size", value = "the Product Size object to be stored in the database", required = true) ProductSize productSize,
+			UriComponentsBuilder ucBuilder) {
 		try {
 			logger.info("Add product size {}", productSize);
 			
@@ -133,7 +155,12 @@ public class ProductSizeWebController {
 	 * @return the response object with success true/false and message about the operation performed successfully or not
 	 */
 	@RequestMapping(value = "{id}", method = RequestMethod.PUT)
-	public ResponseEntity<Response> updateProductSize(@PathVariable Integer id, @RequestBody ProductSize productSize) {
+	@ApiOperation(value = "Update given Product size object record in the database", response = Response.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Product size record updated successfully"),
+			@ApiResponse(code = 500, message = "Internal Server Error"), @ApiResponse(code = 400, message = "Bad Request") })
+	public ResponseEntity<Response> updateProductSize(
+			@PathVariable(name = "id", required = true) @ApiParam(name = "product size id", value = "the id of Product Size object to be updated in the database", required = true) Integer id,
+			@RequestBody(required = true) @ApiParam(name = "product size", value = "the Product Size object to be updated in the database", required = true) ProductSize productSize) {
 		try {
 			logger.info("Update product size {}", productSize);
 			
@@ -161,7 +188,12 @@ public class ProductSizeWebController {
 	 * @return the response object with success true/false and message about the operation performed successfully or not
 	 */
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<Object> deleteProductSize(@PathVariable Integer id) {
+	@ApiOperation(value = "Delete the given Product size object from the database")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Product size record deleted successfully", response = Response.class),
+			@ApiResponse(code = 500, message = "Internal Server Error"), @ApiResponse(code = 400, message = "Bad Request"),
+			@ApiResponse(code = 404, message = "Not Found") })
+	public ResponseEntity<Object> deleteProductSize(
+			@PathVariable(name = "id", required = true) @ApiParam(name = "product size id", value = "the id of Product Size object to be deleted from the database", required = true) Integer id) {
 		try {
 			logger.info("Deleting product size by id: {}", id);
 			if (id == null) {

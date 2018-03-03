@@ -22,6 +22,12 @@ import org.vantibolli.pwi.ext.Response;
 import org.vantibolli.pwi.model.Product;
 import org.vantibolli.pwi.service.ProductService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 /**
  * The Spring web service controller class to perform Product related operations
  * 
@@ -29,6 +35,7 @@ import org.vantibolli.pwi.service.ProductService;
  * @version 1.0
  * @since 23-Feb-2018
  */
+@Api(value = "Product API", tags = { "Product Web Services" })
 @Controller
 @RequestMapping("/product")
 public class ProductWebController {
@@ -44,6 +51,10 @@ public class ProductWebController {
 	 * @return list of Products
 	 */
 	@RequestMapping(method = RequestMethod.GET)
+	@ApiOperation(value = "Get a list of all Products from the database", response = Product.class, responseContainer = "List")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "List of products fetched successfully"),
+			@ApiResponse(code = 500, message = "Internal Server Error", response = Response.class),
+			@ApiResponse(code = 404, message = "Not Found", response = Response.class) })
 	public ResponseEntity<Object> listProducts() {
 		try {
 			logger.info("Getting list of products");
@@ -69,7 +80,13 @@ public class ProductWebController {
 	 * @return Product object found from the database
 	 */
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
-	public ResponseEntity<Object> findProduct(@PathVariable Integer id) {
+	@ApiOperation(value = "Find Product object from the database against given product id", response = Product.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Product record found"),
+			@ApiResponse(code = 500, message = "Internal Server Error", response = Response.class),
+			@ApiResponse(code = 400, message = "Bad Request", response = Response.class),
+			@ApiResponse(code = 404, message = "Not Found", response = Response.class) })
+	public ResponseEntity<Object> findProduct(
+			@PathVariable(name = "id", required = true) @ApiParam(name = "product id", value = "the id of Product to find", required = true) Integer id) {
 		try {
 			logger.info("Finding product id: {}", id);
 			if (id == null) {
@@ -100,7 +117,11 @@ public class ProductWebController {
 	 * @return the response object with success true/false and message about the operation performed successfully or not
 	 */
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Response> addProduct(@RequestBody Product product, UriComponentsBuilder ucBuilder) {
+	@ApiOperation(value = "Store given Product object record in the database", response = Response.class)
+	@ApiResponses(value = { @ApiResponse(code = 201, message = "Product record created successfully"),
+			@ApiResponse(code = 500, message = "Internal Server Error"), @ApiResponse(code = 400, message = "Bad Request") })
+	public ResponseEntity<Response> addProduct(@RequestBody(required = true) @ApiParam(name = "product", value = "the Product object to be stored in the database", required = true) Product product,
+			UriComponentsBuilder ucBuilder) {
 		try {
 			logger.info("Add product {}", product);
 			
@@ -133,7 +154,12 @@ public class ProductWebController {
 	 * @return the response object with success true/false and message about the operation performed successfully or not
 	 */
 	@RequestMapping(value = "{id}", method = RequestMethod.PUT)
-	public ResponseEntity<Response> updateProduct(@PathVariable Integer id, @RequestBody Product product) {
+	@ApiOperation(value = "Update given Product object record in the database", response = Response.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Product record updated successfully"),
+			@ApiResponse(code = 500, message = "Internal Server Error"), @ApiResponse(code = 400, message = "Bad Request") })
+	public ResponseEntity<Response> updateProduct(
+			@PathVariable(name = "id", required = true) @ApiParam(name = "product id", value = "the id of the Product object to be updated", required = true) Integer id,
+			@RequestBody(required = true) @ApiParam(name = "product", value = "the Product object to be deleted from the database", required = true) Product product) {
 		try {
 			logger.info("Update product {}", product);
 			
@@ -163,7 +189,12 @@ public class ProductWebController {
 	 * @return the response object with success true/false and message about the operation performed successfully or not
 	 */
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<Object> deleteProduct(@PathVariable Integer id) {
+	@ApiOperation(value = "Delete the given Product object from the database")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Product record deleted successfully", response = Response.class),
+			@ApiResponse(code = 500, message = "Internal Server Error"), @ApiResponse(code = 400, message = "Bad Request"),
+			@ApiResponse(code = 404, message = "Not Found") })
+	public ResponseEntity<Object> deleteProduct(
+			@PathVariable(name = "id", required = true) @ApiParam(name = "product id", value = "the id of Product to be deleted from the database", required = true) Integer id) {
 		try {
 			logger.info("Deleting product id: {}", id);
 			if (id == null) {

@@ -22,6 +22,12 @@ import org.vantibolli.pwi.ext.Response;
 import org.vantibolli.pwi.model.ProductType;
 import org.vantibolli.pwi.service.ProductTypeService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 /**
  * The Spring web service controller class to perform Product Type related operations
  * 
@@ -29,6 +35,7 @@ import org.vantibolli.pwi.service.ProductTypeService;
  * @version 1.0
  * @since 23-Feb-2018
  */
+@Api(value = "Product Type API", tags = { "Product Type Web Services" })
 @Controller
 @RequestMapping("/productType")
 public class ProductTypeWebController {
@@ -44,6 +51,10 @@ public class ProductTypeWebController {
 	 * @return list of Product Types
 	 */
 	@RequestMapping(method = RequestMethod.GET)
+	@ApiOperation(value = "Get a list of all Product types from the database", response = ProductType.class, responseContainer = "List")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "List of product types fetched successfully"),
+			@ApiResponse(code = 500, message = "Internal Server Error", response = Response.class),
+			@ApiResponse(code = 404, message = "Not Found", response = Response.class) })
 	public ResponseEntity<Object> listProductTypes() {
 		try {
 			logger.info("Getting list of product types");
@@ -61,7 +72,7 @@ public class ProductTypeWebController {
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-
+	
 	/**
 	 * Find Product Type object from database against given product id
 	 * 
@@ -70,7 +81,13 @@ public class ProductTypeWebController {
 	 * @return Product Type object found from the database
 	 */
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
-	public ResponseEntity<Object> findProductType(@PathVariable Integer id) {
+	@ApiOperation(value = "Find Product type object from the database against given country id", response = ProductType.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Product type record found"),
+			@ApiResponse(code = 500, message = "Internal Server Error", response = Response.class),
+			@ApiResponse(code = 400, message = "Bad Request", response = Response.class),
+			@ApiResponse(code = 404, message = "Not Found", response = Response.class) })
+	public ResponseEntity<Object> findProductType(
+			@PathVariable(name = "id", required = true) @ApiParam(name = "product type id", value = "the id of Product to find", required = true) Integer id) {
 		try {
 			logger.info("Finding by product type id: {}", id);
 			if (id == null) {
@@ -91,7 +108,7 @@ public class ProductTypeWebController {
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-
+	
 	/**
 	 * Store given Product Type object record in the database
 	 * 
@@ -102,7 +119,12 @@ public class ProductTypeWebController {
 	 * @return the response object with success true/false and message about the operation performed successfully or not
 	 */
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Response> addProductType(@RequestBody ProductType productType, UriComponentsBuilder ucBuilder) {
+	@ApiOperation(value = "Store given Product type object record in the database", response = Response.class)
+	@ApiResponses(value = { @ApiResponse(code = 201, message = "Product type record created successfully"),
+			@ApiResponse(code = 500, message = "Internal Server Error"), @ApiResponse(code = 400, message = "Bad Request") })
+	public ResponseEntity<Response> addProductType(
+			@RequestBody(required = true) @ApiParam(name = "product type", value = "the Product Type object to be stored in the database", required = true) ProductType productType,
+			UriComponentsBuilder ucBuilder) {
 		try {
 			logger.info("Add product type {}", productType);
 			
@@ -134,7 +156,12 @@ public class ProductTypeWebController {
 	 * @return the response object with success true/false and message about the operation performed successfully or not
 	 */
 	@RequestMapping(value = "{id}", method = RequestMethod.PUT)
-	public ResponseEntity<Response> updateProductType(@PathVariable Integer id, @RequestBody ProductType productType) {
+	@ApiOperation(value = "Update given Product type object record in the database", response = Response.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Product type record updated successfully"),
+			@ApiResponse(code = 500, message = "Internal Server Error"), @ApiResponse(code = 400, message = "Bad Request") })
+	public ResponseEntity<Response> updateProductType(
+			@PathVariable(name = "id", required = true) @ApiParam(name = "product type id", value = "the id of Product Type object to be updated in the database", required = true) Integer id,
+			@RequestBody(required = true) @ApiParam(name = "product type", value = "the Product Type object to be updated in the database", required = true) ProductType productType) {
 		try {
 			logger.info("Update product type {}", productType);
 			
@@ -153,7 +180,7 @@ public class ProductTypeWebController {
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-
+	
 	/**
 	 * Delete the given Product Type object from the database
 	 * 
@@ -162,7 +189,12 @@ public class ProductTypeWebController {
 	 * @return the response object with success true/false and message about the operation performed successfully or not
 	 */
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<Object> deleteProductType(@PathVariable Integer id) {
+	@ApiOperation(value = "Delete the given Product type object from the database")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Product type record deleted successfully", response = Response.class),
+			@ApiResponse(code = 500, message = "Internal Server Error"), @ApiResponse(code = 400, message = "Bad Request"),
+			@ApiResponse(code = 404, message = "Not Found") })
+	public ResponseEntity<Object> deleteProductType(
+			@PathVariable(name = "id", required = true) @ApiParam(name = "product type id", value = "the id of Product Type object to be deleted from the database", required = true) Integer id) {
 		try {
 			logger.info("Deleting product type by id: {}", id);
 			if (id == null) {
