@@ -144,7 +144,7 @@
 					<webResources>
 						<resource>
 							<directory>doc</directory>
-							<targetPath>doc</targetPath>
+							<targetPath>WEB-INF/doc</targetPath>
 						</resource>
 					</webResources>
 				</configuration>
