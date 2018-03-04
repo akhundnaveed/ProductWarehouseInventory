@@ -73,12 +73,13 @@ Goals: `clean compile tomcat:redeploy`
 
 ![maven deployment goals](https://github.com/akhundnaveed/ProductWarehouseInventory/blob/master/img/maven_deploy_goals.png)
 
-Click `Environment` tab add following variables and values (enter values as your tomcat manager user)
-| Name | Value |
-| --- | --- |
-| tomcat.url | http://localhost:8080/manager/text |
-| tomcat.username | admin |
-| tomcat.password | 6yqpbx93 |
+Click `Environment` tab add following variables and values (enter values as your tomcat manager user):
+ 
+ Name           | Value 
+--------------- | ------------------------------ 
+tomcat.url      | http://localhost:8080/manager/text 
+tomcat.username | admin 
+tomcat.password | 6yqpbx93
 
 ![maven tomcat parameters](https://github.com/akhundnaveed/ProductWarehouseInventory/blob/master/img/maven_tomcat_param.png)
 
