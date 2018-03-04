@@ -17,7 +17,7 @@ git clone git@github.com:akhundnaveed/ProductWarehouseInventory.git
 The database used by PWI project is MySql 5.7.x
 
 ### Database Design
-![alt PWI Database Design](https://github.com/akhundnaveed/ProductWarehouseInventory/img/pwi_db.png)
+![PWI Database Design](https://github.com/akhundnaveed/ProductWarehouseInventory/blob/master/img/pwi_db.png)
 ### Create database
 Connect to mysql as root user and execute following command
 ```
@@ -51,9 +51,9 @@ Click `Run` button
 Name: `PWI Tests`
 Base Directory: `Browse Workspace...` > select `ProductWarehouseInventory` project
 Goals: `clean compile tomcat:redeploy`
-![maven deployment goals](https://github.com/akhundnaveed/ProductWarehouseInventory/img/maven_deploy_goals.png)
+![maven deployment goals](https://github.com/akhundnaveed/ProductWarehouseInventory/blob/master/img/maven_deploy_goals.png)
 Click `Environment` tab add following variables and values
-![maven tomcat parameters](https://github.com/akhundnaveed/ProductWarehouseInventory/img/maven_tomcat_param.png)
+![maven tomcat parameters](https://github.com/akhundnaveed/ProductWarehouseInventory/blob/master/img/maven_tomcat_param.png)
 Note 1: Considering the user exists with manager rights in the Apache tomcat `conf/tomcat_users.xml` file
 Note 2: Before clicking the `Run` button make sure Apache tomcat is up and running
 Click `Run` button
@@ -62,13 +62,13 @@ Click `Run` button
 Open browser and go to following URL
 http://localhost:8080/pwi/
 This should display the Swagger-UI page with API endpoints available for ProductWarehouseInventory project
-![PWI Swagger UI](https://github.com/akhundnaveed/ProductWarehouseInventory/img/pwi_swagger_ui.png)
+![PWI Swagger UI](https://github.com/akhundnaveed/ProductWarehouseInventory/blob/master/img/pwi_swagger_ui.png)
 
 ### View Javadoc
 Open browser and go to following URL
 http://localhost:8080/pwi/doc/index.html
 This should display all available packages and classes for ProductWarehouseInventory project in Javadoc form
-![PWI Java Documentation](https://github.com/akhundnaveed/ProductWarehouseInventory/img/pwi_javadoc.png)
+![PWI Java Documentation](https://github.com/akhundnaveed/ProductWarehouseInventory/blob/master/img/pwi_javadoc.png)
 
 
 
