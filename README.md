@@ -1,6 +1,13 @@
 # ProductWarehouseInventory
 The Product and Warehouse and Inventory Assignment by Vantibolli
 
+## Requirements
+- Java 8 or higher version
+- Apache tomcat 8.0.29 or higher version
+- MySql 5.7.20 or higher version
+- Git 2.14.3 or higher version
+- Eclipse IDE or any other
+
 ## Project Setup
 ### Check out project
 ```
@@ -11,10 +18,9 @@ or using ssh
 git clone git@github.com:akhundnaveed/ProductWarehouseInventory.git
 ```
 ### Import in Eclipse
-`File` > `Import` Select `Existing Maven Projects` > `Next` and browse to project location and `Finish`
+`File` > `Import` > `Existing Maven Projects` > `Next` > browse to project location `ProductWarehouseInventory` > `Finish`
 
 ## Database Setup
-The database used by PWI project is MySql 5.7.x
 
 ### Database Design
 ![PWI Database Design](https://github.com/akhundnaveed/ProductWarehouseInventory/blob/master/img/pwi_db.png)
@@ -30,13 +36,15 @@ create user 'pwiusr'@'localhost' identified by 'pwi123';
 ```
 ### Grant permission to user on pwi database
 ```
-grant all on pwi.* to 'pwiusr'@'localhost;
+grant all on pwi.* to 'pwiusr'@'localhost';
 ```
 ### Restore database
 Exit from MySql query shell
+
 Go to `<Eclipse_Workspace>/ProductWarehouseInventory/db` path and execute following command
 ```
-mysql pwi < pwi.sql 
+mysql pwi < pwi.sql -u pwiusr -p
+Enter password: pwi123
 ```
 
 ## Running and Testing Services
@@ -49,26 +57,30 @@ Base Directory: `Browse Workspace...` > select `ProductWarehouseInventory` proje
 
 Goals: `clean compile test`
 
-Click `Run` button
+Click `Apply` and then `Run`
 
 ### Deploy to Apache tomcat
-`Run` > `Run Configurations...` Select `m2 Maven Build` and click new button
 
-Name: `PWI Tests`
+Note: Before deploying make sure Apache tomcat is up and running and there is at least one user defined in `tomcat_users.xml` file with manager rights.
 
-Base Directory: `Browse Workspace...` > select `ProductWarehouseInventory` project
+`Run` > `Run Configurations...` > `m2 Maven Build` and click New
+
+Name: `PWI Deployment`
+
+Base Directory: `Browse Workspace...` > `ProductWarehouseInventory` project
 
 Goals: `clean compile tomcat:redeploy`
 
 ![maven deployment goals](https://github.com/akhundnaveed/ProductWarehouseInventory/blob/master/img/maven_deploy_goals.png)
 
-Click `Environment` tab add following variables and values
+Click `Environment` tab add following variables and values (enter values as your tomcat manager user)
+| Name | Value |
+| --- | --- |
+| tomcat.url | http://localhost:8080/manager/text |
+| tomcat.username | admin |
+| tomcat.password | 6yqpbx93 |
 
 ![maven tomcat parameters](https://github.com/akhundnaveed/ProductWarehouseInventory/blob/master/img/maven_tomcat_param.png)
-
-Note 1: Considering the user exists with manager rights in the Apache tomcat `conf/tomcat_users.xml` file
-
-Note 2: Before clicking the `Run` button make sure Apache tomcat is up and running
 
 Click `Run` button
 

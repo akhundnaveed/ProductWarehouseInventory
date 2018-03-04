@@ -15,6 +15,8 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+USE pwi;
+
 --
 -- Table structure for table `country`
 --
@@ -23,7 +25,8 @@ DROP TABLE IF EXISTS `country`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `country` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  
+  `id` INT NOT NULL AUTO_INCREMENT,
   `name` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
@@ -48,17 +51,17 @@ DROP TABLE IF EXISTS `inventory`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `inventory` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `product_id` int(10) unsigned DEFAULT NULL,
-  `product_size_id` int(10) unsigned DEFAULT NULL,
-  `product_type_id` int(10) unsigned DEFAULT NULL,
-  `warehouse_id` int(10) unsigned DEFAULT NULL,
-  `in_stock_quantity` int(10) unsigned DEFAULT NULL,
-  `available_quantity` int(10) unsigned DEFAULT NULL,
-  `in_transit_quantity` int(10) unsigned DEFAULT NULL,
-  `minimum_order_quantity` int(10) unsigned DEFAULT NULL,
-  `per_box_quantity` int(10) unsigned DEFAULT NULL,
-  `reorder_point` int(10) unsigned DEFAULT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `product_id` INT DEFAULT NULL,
+  `product_size_id` INT DEFAULT NULL,
+  `product_type_id` INT DEFAULT NULL,
+  `warehouse_id` INT DEFAULT NULL,
+  `in_stock_quantity` INT DEFAULT NULL,
+  `available_quantity` INT DEFAULT NULL,
+  `in_transit_quantity` INT DEFAULT NULL,
+  `minimum_order_quantity` INT DEFAULT NULL,
+  `per_box_quantity` INT DEFAULT NULL,
+  `reorder_point` INT DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_product_id_idx` (`product_id`),
   KEY `fk_product_size_id_idx` (`product_size_id`),
@@ -89,7 +92,7 @@ DROP TABLE IF EXISTS `product`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `product` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `name` varchar(100) DEFAULT NULL,
   `code` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -115,7 +118,7 @@ DROP TABLE IF EXISTS `product_size`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `product_size` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `size` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
@@ -139,7 +142,7 @@ DROP TABLE IF EXISTS `product_type`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `product_type` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `type` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
@@ -164,9 +167,9 @@ DROP TABLE IF EXISTS `warehouse`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `warehouse` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `name` varchar(100) DEFAULT NULL,
-  `country_id` int(10) unsigned NOT NULL,
+  `country_id` INT NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_country_id_idx` (`country_id`),
   CONSTRAINT `fk_country_id` FOREIGN KEY (`country_id`) REFERENCES `country` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
